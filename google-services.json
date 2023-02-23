@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "712403817145",
+    "project_id": "applio-99d31",
+    "storage_bucket": "applio-99d31.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712403817145:android:2254ce68580dbe7fe68168",
+        "android_client_info": {
+          "package_name": "com.fostech.AppLio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "712403817145-nf319m6safbjukkriir5na13lg3nbajt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBzTZg-YKbqNwOfoTZ0o6ltV8JNIu93Boo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "712403817145-nf319m6safbjukkriir5na13lg3nbajt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

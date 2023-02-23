@@ -1,0 +1,90 @@
+{
+  "expo": {
+    "name": "THE GOLF HOUSE",
+    "slug": "AppLio",
+    "version": "1.0.2",
+    "orientation": "portrait",
+    "icon": "./assets/logoapp.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff",
+      "width": "80%"
+    },
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "scheme": "tgh",
+    "notification": {
+      "icon": "./assets/logoapp.png",
+      "color": "#FFFFFF",
+      "androidMode": "collapse",
+      "androidCollapsedTitle": "TGH"
+    },
+    "updates": {
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+     
+      "supportsTablet": false,
+      "bundleIdentifier": "app.tgh.vn",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Chương trình này sử dụng máy ảnh để cho phép người dùng thêm hình đại diện.",
+        "NSPhotoLibraryAddUsageDescription": "Chương trình sử dụng thư viện ảnh để cho phép người dùng thêm hình đại diện.",
+        "NSPhotoLibraryUsageDescription": "Chương trình sử dụng thư viện ảnh để cho phép người dùng thêm hình đại diện.",
+        "NSLocationWhenInUseUsageDescription": "Chương trình này sử dụng vị trí của bạn để gợi ý cho bạn các công việc gần bạn.",
+        "NSFaceIDUsageDescription":"chương trình này sử dụng TouchID/FaceID để cho phép người dùng đăng nhập"
+      },
+      "config": {
+        "googleMapsApiKey": ""
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logoapp.png",
+        "backgroundColor": "#FFFFFF"
+      },
+      "versionCode": 50,
+      "package": "com.fostech.AppLio",
+      "googleServicesFile": "./google-services.json",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "CAMERA",
+        "MANAGE_DOCUMENTS",
+        "VIBRATE",
+        "WAKE_LOCK",
+        "READ_CALENDAR",
+        "WRITE_CALENDAR",
+        "USE_FINGERPRINT",
+        "USE_BIOMETRIC",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "com.anddoes.launcher.permission.UPDATE_COUNT",
+        "com.android.launcher.permission.INSTALL_SHORTCUT",
+        "com.google.android.c2dm.permission.RECEIVE",
+        "com.google.android.gms.permission.ACTIVITY_RECOGNITION",
+        "com.google.android.providers.gsf.permission.READ_GSERVICES",
+        "com.majeur.launcher.permission.UPDATE_BADGE",
+        "com.sec.android.provider.badge.permission.READ",
+        "com.sec.android.provider.badge.permission.WRITE",
+        "com.sonyericsson.home.permission.BROADCAST_BADGE"
+      ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyAF73nS_jnLFoinG-B-O8nJz9To1wTmJyI"
+        }
+      }
+    },
+    "web": {
+      "favicon": "./assets/splash.png"
+    }
+  }
+}
