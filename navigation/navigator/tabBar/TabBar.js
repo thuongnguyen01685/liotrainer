@@ -135,8 +135,8 @@ const TabBar = () => {
   return (
     <CurvedBottomBar.Navigator
       style={styles.bottomBar}
-      strokeWidth={2}
-      strokeColor="#d8d8d8"
+      // strokeWidth={2}
+      // strokeColor="#d8d8d8"
       height={60}
       circleWidth={50}
       bgColor="#fff"
@@ -262,13 +262,13 @@ export const styles = StyleSheet.create({
   bottomBar: {
     shadowColor: "#000",
     shadowOffset: {
-      width: 10,
-      height: -20,
+      width: 1,
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
 
-    elevation: 50,
+    elevation: 5,
   },
   btnCircle: {
     width: 60,

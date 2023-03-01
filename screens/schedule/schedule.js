@@ -1,20 +1,102 @@
 //import liraries
-import React, { Component } from "react";
-import { View, Text, StyleSheet, Dimensions, FlatList } from "react-native";
+import React, { Component, useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  FlatList,
+  RefreshControl,
+  Image,
+} from "react-native";
 import ItemSchedule from "./itemSchedule";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import {
+  scheduleFutureAction,
+  scheduleListAction,
+} from "../../store/actions/scheduleAction";
+import { color } from "react-native-elements/dist/helpers";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
 const Schedule = () => {
+  const navigation = useNavigation();
+  const [refreshing, setRefresing] = useState(false);
+  const [arrSchedule, setArrSchedule] = useState([]);
+
+  const dispatch = useDispatch();
+  const { schedule } = useSelector((state) => state);
+
+  useEffect(() => {
+    async function it() {
+      await setRefresing(true);
+      const res = await dispatch(scheduleListAction(navigation));
+
+      if (res.length > 1) {
+        setArrSchedule(res);
+      } else {
+        setArrSchedule([res]);
+      }
+
+      await setRefresing(false);
+    }
+    it();
+  }, []);
+
+  const onRefresh = React.useCallback(() => {
+    async function it() {
+      await setRefresing(true);
+      const res = await dispatch(scheduleListAction(navigation));
+      if (res.length > 0) {
+        setArrSchedule(res);
+      } else {
+        setArrSchedule([res]);
+      }
+
+      await setRefresing(false);
+    }
+    it();
+  }, []);
+
   return (
     <View style={styles.container}>
       <View style={{ marginBottom: "15%" }}>
-        <FlatList
-          data={Array(5).fill("")}
-          renderItem={({ item, index }) => (
-            <ItemSchedule item={item} key={index} />
-          )}
-        />
+        {arrSchedule.length > 0 ? (
+          <FlatList
+            data={arrSchedule}
+            renderItem={({ item, index }) => (
+              <ItemSchedule item={item} key={index} />
+            )}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+          />
+        ) : (
+          <View
+            style={{
+              alignSelf: "center",
+              marginTop: height * 0.2,
+            }}>
+            <Image
+              source={require("../../assets/notdata.png")}
+              style={{
+                width: width * 0.5,
+                height: width * 0.4,
+                resizeMode: "contain",
+              }}
+            />
+            <Text
+              style={{
+                fontSize: 16,
+                fontFamily: "LexendDeca_500Medium",
+                textAlign: "center",
+                marginTop: 10,
+              }}>
+              Hiện không có lịch dạy nào.
+            </Text>
+          </View>
+        )}
       </View>
     </View>
   );

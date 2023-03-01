@@ -10,39 +10,62 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import { useDispatch } from "react-redux";
+import { getDetailScheduleAction } from "../../store/actions/scheduleAction";
+import {
+  formatDate,
+  formatDateDisplays,
+  formatDateDisplays2,
+  formatTimeDisplay,
+} from "../../utils/datetime";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
-const ItemSchedule = () => {
+const ItemSchedule = (props) => {
+  const { item } = props;
+
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const handleDetailSchedule = async (id) => {
+    const res = await dispatch(getDetailScheduleAction(id, navigation));
+    navigation.navigate("DetailSchedule", { id });
+  };
+
   return (
     <TouchableOpacity
       style={styles.item}
-      onPress={() => navigation.navigate("DetailSchedule")}>
+      onPress={() => handleDetailSchedule(item.id)}>
       <View style={styles.itemLeft}>
         <Image
           source={require("../../assets/schedule/bgTime.png")}
           style={styles.imgBg}
         />
         <View style={styles.viewBg}>
-          <Text style={styles.textTime}>7:30</Text>
+          <Text style={styles.textTime}>
+            {formatTimeDisplay(item.date_start)}
+          </Text>
         </View>
       </View>
       <View style={styles.itemRight}>
-        <Text style={styles.textTitle}>Gói Beginner 37 VGA 1:4</Text>
+        <Text style={styles.textTitle}>
+          {item?.program_id?.[1]} {item.id}
+        </Text>
         <View style={styles.viewChildRight}>
           <Image
             source={require("../../assets/schedule/Calendar.png")}
             style={styles.imgIcon}
           />
-          <Text style={styles.textViewRight}>Thứ 6 30/12/2022</Text>
+          <Text style={styles.textViewRight}>
+            {formatDate(item.date, "thu")} {formatDateDisplays2(item.date, "/")}
+          </Text>
         </View>
         <View style={styles.viewChildRight}>
           <Image
             source={require("../../assets/schedule/Location.png")}
             style={styles.imgIcon}
           />
-          <Text style={styles.textViewRight}>Tầng 1, The Golf House</Text>
+          <Text style={styles.textViewRight}>{item?.location_id?.[1]}</Text>
         </View>
         <View style={styles.viewAvt}>
           <Image
@@ -64,16 +87,20 @@ const styles = StyleSheet.create({
     width: width * 0.9,
     flexDirection: "row",
     marginVertical: 10,
+    height: height * 0.2,
   },
-  itemLeft: {},
+  itemLeft: {
+    overflow: "hidden",
+  },
   imgBg: {
     width: width * 0.3,
     height: height * 0.2,
     resizeMode: "contain",
+    left: -10,
   },
   viewBg: {
     position: "absolute",
-    width: width * 0.3,
+    width: width * 0.25,
     height: height * 0.2,
     flexDirection: "row",
     justifyContent: "center",
@@ -85,16 +112,18 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   itemRight: {
-    padding: 15,
+    paddingVertical: 15,
   },
   textTitle: {
     fontFamily: "LexendDeca_600SemiBold",
     fontSize: 16,
+    width: width * 0.6,
+    marginBottom: 10,
   },
   viewChildRight: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 5,
+    width: width * 0.5,
   },
   imgIcon: {
     width: 30,

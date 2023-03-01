@@ -1,9 +1,10 @@
 import axios from "axios";
 
+export const URL = "https://betatgh.fostech.vn";
 export default function callApi(endpoint, method = "GET", data, headers) {
   return axios({
     method: method,
-    url: `https://betatgh.fostech.vn/${endpoint}`,
+    url: `${URL}/${endpoint}`,
     data: data,
     headers: headers,
   }).catch((error) => {

@@ -2,18 +2,24 @@
 import React, { Component } from "react";
 import { Dimensions } from "react-native";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { useDispatch } from "react-redux";
+import { listTime } from "../../utils/datetime";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
-const ItemCourse = () => {
+const ItemCourse = (props) => {
+  const { item } = props;
+
   return (
     <TouchableOpacity style={styles.container}>
       <Image
         source={require("../../assets/imghome/golfc.png")}
         style={styles.imgItem}
       />
-      <Text style={styles.textTitle}>Gói Beginner 37 VGA 1:1</Text>
-      <Text style={styles.textMonth}>3 Tháng</Text>
+      <Text style={styles.textTitle}>{item.length !== 0 ? item.name : ""}</Text>
+      <Text style={styles.textMonth}>
+        {item.length !== 0 && listTime[item.time]}
+      </Text>
     </TouchableOpacity>
   );
 };

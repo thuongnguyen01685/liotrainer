@@ -4,6 +4,8 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import ModalNotify from "../modal/modalNotify";
 import { useSelector } from "react-redux";
 import moment from "moment";
+import "moment/locale/vi"; // without this line it didn't work
+moment.locale("vi");
 import SvgNotify from "../../svg/home/svgNotify";
 import SvgHand from "../../svg/home/svgHand";
 import SvgScan from "../../svg/home/svgScan";
@@ -16,6 +18,7 @@ const Header = () => {
 
   const timeNow = () => {
     let time = moment().format("HH:mm:ss");
+
     if (
       time >= moment("01:00:00 AM", "h:mm:ss A").format("HH:mm:ss") &&
       time < moment("11:00:00 AM", "h:mm:ss A").format("HH:mm:ss")
@@ -23,12 +26,12 @@ const Header = () => {
       return "Chào buổi sáng";
     } else if (
       time >= moment("11:00:00 AM", "h:mm:ss A").format("HH:mm:ss") &&
-      time < moment("01:00:00 PM", "h:mm:ss A").format("HH:mm:ss")
+      time < moment("13:00:00 AM", "h:mm:ss A").format("HH:mm:ss")
     ) {
       return "Chào buổi trưa";
     } else if (
-      time >= moment("01:00:00 PM", "h:mm:ss A").format("HH:mm:ss") &&
-      time < moment("06:00:00 PM", "h:mm:ss A").format("HH:mm:ss")
+      time >= moment("13:00:00 AM", "h:mm:ss A").format("HH:mm:ss") &&
+      time < moment("18:00:00 AM", "h:mm:ss A").format("HH:mm:ss")
     ) {
       return "Chào buổi chiều";
     } else {
@@ -59,16 +62,15 @@ const Header = () => {
                 fontFamily: "LexendDeca_500Medium",
                 color: "#fff",
               }}>
-              {timeNow()},
+              {timeNow()}
               <Text
                 style={{
                   fontSize: 14,
                   fontFamily: "LexendDeca_500Medium",
                   color: "#fff",
                 }}>
-                Thương
+                {/* {infoUser?.fullname} */}
               </Text>
-              {/* {infoUser?.fullname} */}
             </Text>
           </View>
         </View>

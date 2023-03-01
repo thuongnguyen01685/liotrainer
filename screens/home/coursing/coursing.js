@@ -1,20 +1,21 @@
 //import liraries
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 import ItemCoursing from "./itemCoursing";
+import { useSelector } from "react-redux";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
-const Coursing = () => {
+const Coursing = (props) => {
+  const { course } = props;
+
   return (
     <View style={styles.container}>
       <View style={styles.ontext}></View>
       <Text style={styles.title}>Khóa học đang diễn ra</Text>
-      {Array(2)
-        .fill("")
-        .map((item, index) => (
-          <ItemCoursing key={index} />
-        ))}
+      {course.map((item, index) => (
+        <ItemCoursing key={index} item={item} />
+      ))}
     </View>
   );
 };
