@@ -18,11 +18,18 @@ import { useNavigation } from "@react-navigation/native";
 
 import HeaderBack from "../../../components/header/headerBack";
 import BottomSheetHV from "./BottomSheetHV";
+import { useSelector } from "react-redux";
+import {
+  formatDate,
+  formatDateDisplays2,
+  formatTimeDisplay,
+} from "../../../utils/datetime";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
 const DetailSchedule = () => {
   const navigation = useNavigation();
+  const { schedule } = useSelector((state) => state);
 
   return (
     <ImageBackground
@@ -35,10 +42,9 @@ const DetailSchedule = () => {
       />
       <HeaderBack />
       <View style={{ marginTop: 10, paddingHorizontal: 5 }}>
-        <Text style={styles.titleText}>Gói Beginner 37 VGA 1:1</Text>
+        <Text style={styles.titleText}>{schedule?.detailSchedule?.name}</Text>
         <Text style={styles.contentText}>
-          Học viên tham gia khóa học chơi golf cá nhân sẽ được hướng dẫn, tập
-          luyện 1:1 với huấn luyện viên theo các cấp độ từ cơ bản đến nâng cao.
+          {schedule.detailSchedule.description}
         </Text>
 
         {/* date month */}
@@ -49,7 +55,10 @@ const DetailSchedule = () => {
               style={styles.imgIcon}
             />
           </View>
-          <Text style={styles.textIcon}>Thứ 6 30/12/2022</Text>
+          <Text style={styles.textIcon}>
+            {/* {formatDate(schedule.detailSchedule.date, "thu")}{" "} */} Thứ 5{" "}
+            {schedule.detailSchedule.date}
+          </Text>
         </View>
 
         {/* location */}
@@ -61,9 +70,8 @@ const DetailSchedule = () => {
               style={styles.imgIcon}
             />
           </View>
-          <View>
+          <View style={{ width: width * 0.6 }}>
             <Text style={styles.textIcon}>The Golf House</Text>
-            <Text style={styles.textIconChild}>Nguyễn Cơ Thạch, Quận 2</Text>
           </View>
         </View>
 
@@ -76,7 +84,9 @@ const DetailSchedule = () => {
               style={styles.imgIcon}
             />
           </View>
-          <Text style={styles.textIcon}>7:30 AM</Text>
+          <Text style={styles.textIcon}>
+            {/* {formatTimeDisplay(schedule.detailSchedule.date_start)} */} 7:30
+          </Text>
         </View>
         {/* hocvien */}
         <View style={styles.cardIcon}>
@@ -86,10 +96,12 @@ const DetailSchedule = () => {
               style={styles.imgIcon}
             />
           </View>
-          <Text style={styles.textIcon}>4 Học Viên</Text>
+          <Text style={styles.textIcon}>
+            {schedule.detailSchedule?.trainee?.length} Học Viên
+          </Text>
         </View>
       </View>
-      <BottomSheetHV />
+      <BottomSheetHV arrHv={schedule.detailSchedule.trainee} />
     </ImageBackground>
   );
 };

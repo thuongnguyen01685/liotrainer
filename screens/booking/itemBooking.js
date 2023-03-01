@@ -10,38 +10,54 @@ import {
   Image,
   TouchableOpacity,
 } from "react-native";
+import { formatTimeDisplay } from "../../utils/datetime";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
-const ItemBooking = () => {
+const ItemBooking = (props) => {
   const navigation = useNavigation();
+  const { item, handleBooking, index, idBooking, check } = props;
   return (
-    <TouchableOpacity style={styles.item}>
+    <TouchableOpacity
+      style={[
+        styles.item,
+        {
+          backgroundColor:
+            idBooking === item.id && check === false ? "#A3BD75" : "#e5e5e5",
+        },
+      ]}
+      onPress={() => handleBooking(item.id)}>
       <View style={styles.itemLeft}>
         <Image
           source={require("../../assets/schedule/bgTime.png")}
           style={styles.imgBg}
         />
         <View style={styles.viewBg}>
-          <Text style={styles.textTime}>7:30</Text>
+          <Text style={styles.textTime}>
+            {formatTimeDisplay(item.date_start)}
+          </Text>
         </View>
       </View>
       <View style={styles.itemRight}>
-        <Text style={styles.textTitle}>Gói Beginner 37 VGA 1:4</Text>
+        <Text style={styles.textTitle}>{item.program_id[1]}</Text>
 
         <View style={styles.viewChildRight}>
           <Image
             source={require("../../assets/schedule/Location.png")}
             style={styles.imgIcon}
           />
-          <Text style={styles.textViewRight}>Tầng 1, The Golf House</Text>
+          <Text style={styles.textViewRight}>
+            {item.location_detail_id[1]}, {item.location_id[1]}
+          </Text>
         </View>
         <View style={styles.viewChildRight}>
           <Image
             source={require("../../assets/schedule/detail/people.png")}
             style={styles.imgIcon}
           />
-          <Text style={styles.textViewRight}>Số lượng: 2</Text>
+          <Text style={styles.textViewRight}>
+            Số lượng: {item.trainee_count}
+          </Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -51,7 +67,6 @@ const ItemBooking = () => {
 // define your styles
 const styles = StyleSheet.create({
   item: {
-    backgroundColor: "#e5e5e5",
     marginHorizontal: 15,
     alignSelf: "center",
     width: width * 0.9,
@@ -108,6 +123,7 @@ const styles = StyleSheet.create({
     color: "#688338",
     fontSize: 14,
     left: 5,
+    width: width * 0.5,
   },
   viewAvt: {
     left: 5,

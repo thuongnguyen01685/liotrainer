@@ -2,18 +2,46 @@
 import React, { Component } from "react";
 import { Dimensions, Image, ImageBackground } from "react-native";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
 import SvgLine from "../../../svg/home/svgLine";
 import SvgLocation from "../../../svg/home/svgLocation";
+import {
+  formatDate,
+  formatDateDisplays2,
+  formatTimeDisplay,
+} from "../../../utils/datetime";
+import {
+  checkScheduleAction,
+  scheduleFutureAction,
+} from "../../../store/actions/scheduleAction";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
 const ItemCheckSchedule = (props) => {
-  const { showModalSuccess, setShowModalSuccess } = props;
-  const handleCheckIn = () => {
-    setShowModalSuccess(true);
+  const {
+    item,
+    showModalSuccess,
+    setShowModalSuccess,
+    showModalCheckout,
+    setShowModalCheckout,
+  } = props;
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  const handleCheckIn = async (id) => {
+    await dispatch(checkScheduleAction(id, "checkin", navigation));
+    await setShowModalSuccess(true);
+    await dispatch(scheduleFutureAction(navigation));
   };
-  const handleCheckOut = () => {
-    setShowModalSuccess(true);
+  const handleCheckOut = async (id) => {
+    await dispatch(checkScheduleAction(id, "checkout", navigation));
+    await setShowModalCheckout(true);
+    await dispatch(scheduleFutureAction(navigation));
+  };
+  const handleCancel = async (id) => {
+    await dispatch(checkScheduleAction(id, "cancel", navigation));
+    await dispatch(scheduleFutureAction(navigation));
   };
   return (
     <ImageBackground
@@ -21,16 +49,24 @@ const ItemCheckSchedule = (props) => {
       style={styles.bgView}>
       <View style={styles.viewTime}>
         <View>
-          <Text style={styles.dateText}>Thứ Sáu</Text>
-          <Text style={styles.dateText}>30/12/2022</Text>
+          <Text style={styles.dateText}>
+            {item.date && formatDate(item.date, "thu")}
+          </Text>
+          <Text style={styles.dateText}>
+            {item.date && formatDateDisplays2(item.date, "/")}
+          </Text>
         </View>
-        <Text style={styles.timeText}>07:30</Text>
+        <Text style={styles.timeText}>
+          {item.date_start && formatTimeDisplay(item.date_start)}
+        </Text>
       </View>
       <View style={styles.cardView}>
         <View style={styles.addressView}>
           <SvgLocation />
           <Text style={styles.textAddress}>
-            85-87 Nguyễn Cơ Thạch, An Lợi Đông, Q.2, TPHCM
+            {item.length !== 0
+              ? item.location_detail_id[1] + " - " + item.location_id[1]
+              : ""}
           </Text>
         </View>
         <View style={{ left: 8, marginTop: -8 }}>
@@ -47,19 +83,32 @@ const ItemCheckSchedule = (props) => {
               left: -2,
             }}
           />
-          <Text style={styles.textAddress}>Gói Beginner 37 VGA 1:1</Text>
+          <Text style={styles.textAddress}>
+            {item.length !== 0 ? item.program_id[1] : ""}
+          </Text>
         </View>
-        <View style={styles.viewBtn}>
-          <TouchableOpacity
-            style={[styles.btn, { backgroundColor: "#688338" }]}
-            onPress={handleCheckIn}>
-            <Text style={styles.textbtn}>Check In</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.btn, { backgroundColor: "#AFAFAF" }]}>
-            <Text style={styles.textbtn}>Hủy dạy</Text>
-          </TouchableOpacity>
-        </View>
+        {item.status === "checkin" ? (
+          <View style={styles.viewBtn}>
+            <TouchableOpacity
+              style={[styles.btn, { backgroundColor: "#BE0000" }]}
+              onPress={() => handleCheckOut(item.id)}>
+              <Text style={styles.textbtn}>Check out</Text>
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <View style={styles.viewBtn}>
+            <TouchableOpacity
+              style={[styles.btn, { backgroundColor: "#688338" }]}
+              onPress={() => handleCheckIn(item.id)}>
+              <Text style={styles.textbtn}>Check In</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.btn, { backgroundColor: "#AFAFAF" }]}
+              onPress={() => handleCancel(item.id)}>
+              <Text style={styles.textbtn}>Hủy dạy</Text>
+            </TouchableOpacity>
+          </View>
+        )}
       </View>
     </ImageBackground>
   );

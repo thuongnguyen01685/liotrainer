@@ -4,11 +4,12 @@ import { View, Text, StyleSheet } from "react-native";
 import Slider from "@react-native-community/slider";
 
 // create a component
-const ItemCoursing = () => {
+const ItemCoursing = (props) => {
+  const { item } = props;
   return (
     <View style={styles.container}>
       <View style={styles.viewProgress}>
-        <Text style={styles.title}>Gói Beginner 37 VGA 1:1</Text>
+        <Text style={styles.title}>{item?.program_id[1]}</Text>
         <Text style={styles.progress}>40%</Text>
       </View>
       <View>

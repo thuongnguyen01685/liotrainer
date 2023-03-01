@@ -9,24 +9,24 @@ import {
   Image,
 } from "react-native";
 import Modal from "react-native-modal";
+import { Ionicons } from "@expo/vector-icons";
 
 const { width } = Dimensions.get("window");
-const ModalSuccessCheck = (props) => {
+const ModalFailCheck = (props) => {
   const navi = useNavigation();
   const {
-    showModalSuccess,
-    setShowModalSuccess,
+    showModalFail,
+    setShowModalFail,
     titleName,
     ContentBody,
     setScanned,
-    goHome,
   } = props;
 
   return (
     <Modal
       animationType="fade"
       transparent={true}
-      isVisible={showModalSuccess}
+      isVisible={showModalFail}
       backdropColor="#C4C4C4"
       backdropOpacity={0.5}
       //   onBackdropPress={() => {
@@ -51,15 +51,10 @@ const ModalSuccessCheck = (props) => {
             marginBottom: 15,
             width: width * 0.8,
           }}>
-          <Image
-            source={require("../../assets/schedule/detail/bi_check.png")}
-            style={{
-              width: 50,
-              height: 50,
-              resizeMode: "contain",
-              alignSelf: "center",
-            }}
-          />
+          <View style={{ alignSelf: "center" }}>
+            <Ionicons name="close" color="#BE0000" size={40} />
+          </View>
+
           <Text
             style={{
               fontSize: 18,
@@ -90,18 +85,11 @@ const ModalSuccessCheck = (props) => {
           <TouchableOpacity
             style={[
               styles.button,
-              { backgroundColor: "#688338", marginLeft: 10 },
+              { backgroundColor: "#BE0000", marginLeft: 10 },
             ]}
             onPress={() => {
-              if (setScanned) {
-                setScanned(false);
-              }
-              setShowModalSuccess(false);
-              if (goHome) {
-                navi.goBack();
-              } else {
-                navi.navigate("CheckSchedule");
-              }
+              setScanned(false);
+              setShowModalFail(false);
             }}>
             <Text
               style={{
@@ -109,7 +97,7 @@ const ModalSuccessCheck = (props) => {
                 fontFamily: "LexendDeca_400Regular",
                 color: "#fff",
               }}>
-              Tiếp tục
+              Thử lại
             </Text>
           </TouchableOpacity>
         </View>
@@ -138,4 +126,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ModalSuccessCheck;
+export default ModalFailCheck;

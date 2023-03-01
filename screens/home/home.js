@@ -1,5 +1,5 @@
 //import liraries
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  RefreshControl,
 } from "react-native";
 import Header from "../../components/header/header";
 import Constants from "expo-constants";
@@ -16,6 +17,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import Coursing from "./coursing/coursing";
 import LessonSchedule from "./calendarTeach/lessonSchedule";
 import { useNavigation } from "@react-navigation/native";
+import { useSelector, useDispatch } from "react-redux";
+import { scheduleFutureAction } from "../../store/actions/scheduleAction";
+import ModalSuccessCheck from "../../components/modal/modalSuccessCheck";
+import { CourseRunningAction } from "../../store/actions/coursesAction";
 
 const dataBox = [
   {
@@ -38,6 +43,54 @@ const dataBox = [
 const { width, height } = Dimensions.get("screen");
 const Home = () => {
   const navigation = useNavigation();
+
+  const dispatch = useDispatch();
+  const { user, schedule } = useSelector((state) => state);
+  const [refreshing, setRefresing] = useState(false);
+  const [showModalCheckIn, setShowModalCheckIn] = useState(false);
+  const [showModalCheckout, setShowModalCheckout] = useState(false);
+  const [dataCourseRunning, setDataCourseRunning] = useState([]);
+
+  useEffect(() => {
+    async function it() {
+      setRefresing(true);
+      dispatch(scheduleFutureAction(navigation));
+      const res = await dispatch(CourseRunningAction(navigation));
+
+      if (res) {
+        if (res.length > 0) {
+          setDataCourseRunning(res);
+        } else {
+          setDataCourseRunning([res]);
+        }
+      } else {
+        setDataCourseRunning([]);
+      }
+
+      setRefresing(false);
+    }
+    it();
+  }, [dispatch]);
+
+  const onRefresh = React.useCallback(() => {
+    async function it() {
+      setRefresing(true);
+      dispatch(scheduleFutureAction(navigation));
+      const res = await dispatch(CourseRunningAction(navigation));
+      if (res) {
+        if (res.length > 0) {
+          setDataCourseRunning(res);
+        } else {
+          setDataCourseRunning([res]);
+        }
+      } else {
+        setDataCourseRunning([]);
+      }
+      setRefresing(false);
+    }
+    it();
+  }, []);
+
   return (
     <LinearGradient
       style={styles.container}
@@ -62,6 +115,25 @@ const Home = () => {
       <Header />
 
       <View style={styles.viewBody}>
+        {showModalCheckIn && (
+          <ModalSuccessCheck
+            showModalSuccess={showModalCheckIn}
+            setShowModalSuccess={setShowModalCheckIn}
+            titleName={"Check-in thành công"}
+            ContentBody={"Tiếp tục tập luyện thật chăm chỉ nào!"}
+          />
+        )}
+        {showModalCheckout && (
+          <ModalSuccessCheck
+            showModalSuccess={showModalCheckout}
+            setShowModalSuccess={setShowModalCheckout}
+            titleName={"Check-out thành công"}
+            ContentBody={
+              "Bạn đã tập luyện rất chăm chỉ, hãy cố gắng hơn nữa nhé!"
+            }
+          />
+        )}
+
         <View style={styles.viewAvt}>
           <Image
             source={require("../../assets/imghome/avt.jpg")}
@@ -74,8 +146,11 @@ const Home = () => {
           />
         </View>
 
-        <Text style={styles.textName}>Nguyễn Thương</Text>
-        <ScrollView>
+        <Text style={styles.textName}>{user?.infoUser?.fullname}</Text>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
           <View style={styles.viewBox}>
             {dataBox.map((item, index) => (
               <TouchableOpacity
@@ -88,8 +163,12 @@ const Home = () => {
             ))}
           </View>
 
-          <Coursing />
-          <LessonSchedule />
+          <Coursing course={dataCourseRunning} />
+          <LessonSchedule
+            setShowModalCheckIn={setShowModalCheckIn}
+            setShowModalCheckout={setShowModalCheckout}
+            schedule={schedule}
+          />
         </ScrollView>
       </View>
     </LinearGradient>

@@ -6,28 +6,31 @@ import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
 import { useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { URL } from "../../../utils/callApi";
 
 // create a component
 const { width, height } = Dimensions.get("window");
-const BottomSheetHV = () => {
+const BottomSheetHV = (props) => {
   const sheetRef = useRef(null);
-  const snapPoints = ["17%", "45%"];
+  const snapPoints = ["17%", "28%"];
   const navigation = useNavigation();
+  const { arrHv } = props;
+
   return (
     <BottomSheet ref={sheetRef} index={1} snapPoints={snapPoints}>
       <View style={styles.container}>
         <Text style={styles.textTitle}>Danh sách học viên</Text>
         <BottomSheetFlatList
           showsVerticalScrollIndicator={false}
-          data={Array(10).fill("")}
+          data={arrHv}
           renderItem={({ item, index }) => (
             <View style={styles.itemStudent} key={index}>
               <View style={styles.viewLeft}>
                 <Image
-                  source={require("../../../assets/imghome/avt.jpg")}
+                  source={{ uri: `${URL}${item.avatar}` }}
                   style={styles.imgAvt}
                 />
-                <Text style={styles.textName}>Thương Nguyễn</Text>
+                <Text style={styles.textName}>{item.name}</Text>
               </View>
               <TouchableOpacity
                 style={styles.btnDetail}

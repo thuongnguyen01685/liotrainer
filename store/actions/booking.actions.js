@@ -3,73 +3,90 @@ import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { refreshTokenAction } from "./refreshToken.actions";
 
-export const listTimeBookingAction = (
-  idLocation,
-  time,
-  idProgram,
-  navigate
-) => {
-  const add = async (dispatch) => {
-    try {
-      let temp = await AsyncStorage.getItem("token");
-      const token = await JSON.parse(temp);
-      const res = await callApi(
-        `restapi/1.0/object/academy.schedule.booking?domain=[('date_start','>=','${time}'),('date_start','<=','${moment(
-          time
-        ).format(
-          "YYYY-MM-DD"
-        )} 23:59:59'),('schedule_id.location_id.id','=',${idLocation}),('program_id','=',${idProgram})]`,
-        "GET",
-        "",
-        {
-          "X-Authorization": `Bearer ${token.access_token}`,
-        }
-      );
-      if (res.code === 401) {
-        dispatch(refreshTokenAction(navigate));
-      } else {
-        if (res?.data?.["academy.schedule.booking"]) {
-          return res?.data?.["academy.schedule.booking"];
-        } else {
-          console.log(res, "academy.schedule.booking");
-        }
+export const listBookingAction = (time, navigate) => async (dispatch) => {
+  try {
+    let temp = await AsyncStorage.getItem("token");
+    const token = await JSON.parse(temp);
+    const res = await callApi(
+      `restapi/1.0/object/academy.schedule.booking?domain=[('trainer_id','=',False),('date_start','>=','${time}'),('date_start','<=','${moment(
+        time
+      ).format("YYYY-MM-DD")} 23:59:59')]`,
+      "GET",
+      "",
+      {
+        "X-Authorization": `Bearer ${token.access_token}`,
       }
-    } catch (err) {
-      console.log(err);
+    );
+
+    if (res.code === 401) {
+      dispatch(refreshTokenAction(navigate));
+    } else {
+      if (res?.data?.["academy.schedule.booking"]) {
+        return res?.data?.["academy.schedule.booking"];
+      } else {
+        console.log(res, "academy.schedule.booking");
+      }
     }
-  };
-  return add;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
-export const bookingAction = (data, navigate) => {
-  const add = async (dispatch) => {
-    try {
-      let temp = await AsyncStorage.getItem("token");
-      const token = await JSON.parse(temp);
-      const res = await callApi(
-        `restapi/1.0/object/academy.booking?vals={'location_id':'${data?.location_id}','location_detail_id':'${data?.location_detail_id}','trainee_id':'${data?.trainee_id}','course_id':'${data?.course_id}','num_of_lession':'${data?.num_of_lession}','trainer_id':'${data?.trainer_id}','date':'${data?.date}','start_time':'${data?.start_time}','end_time':'${data?.end_time}','note':'${data?.note}','status':'pending','schedule_booking_id':'${data?.schedule_booking_id}'}`,
-        "POST",
-        "",
-        {
-          "X-Authorization": `Bearer ${token.access_token}`,
-        }
-      );
-
-      if (res.code === 401) {
-        await dispatch(refreshTokenAction(navigate));
-        await dispatch(bookingAction(data, navigate));
-      } else {
-        if (res?.data?.["academy.booking"]) {
-          return res?.data?.["academy.booking"];
-        } else {
-          return res;
-        }
+export const detailBookingAction = (id, time, navigate) => async (dispatch) => {
+  try {
+    let temp = await AsyncStorage.getItem("token");
+    const token = await JSON.parse(temp);
+    const res = await callApi(
+      `restapi/1.0/object/academy.schedule.booking?domain=[('trainer_id','=',False),('date_start','>=','${time}'),('date_start','<=','${moment(
+        time
+      ).format("YYYY-MM-DD")} 23:59:59'),('id','=',${id})]`,
+      "GET",
+      "",
+      {
+        "X-Authorization": `Bearer ${token.access_token}`,
       }
-    } catch (err) {
-      console.log(err);
+    );
+
+    if (res.code === 401) {
+      dispatch(refreshTokenAction(navigate));
+    } else {
+      if (res?.data?.["academy.schedule.booking"]) {
+        return res?.data?.["academy.schedule.booking"];
+      } else {
+        console.log(res, "academy.schedule.booking");
+      }
     }
-  };
-  return add;
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const bookingAction = (data, navigate) => async (dispatch) => {
+  try {
+    let temp = await AsyncStorage.getItem("token");
+    const token = await JSON.parse(temp);
+    const res = await callApi(
+      `restapi/1.0/object/academy.trainer.booking?vals=${JSON.stringify(data)}`,
+      "POST",
+      "",
+      {
+        "X-Authorization": `Bearer ${token.access_token}`,
+      }
+    );
+
+    if (res.code === 401) {
+      await dispatch(refreshTokenAction(navigate));
+      await dispatch(bookingAction(data, navigate));
+    } else {
+      if (res?.data) {
+        return res?.data;
+      } else {
+        console.log(res, "error post");
+      }
+    }
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const cancelBookingAction = (id, navigate) => {

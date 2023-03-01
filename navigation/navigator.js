@@ -11,10 +11,12 @@ import { Text, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CheckSchedule from "../screens/CheckinOrOut/CheckSchedule";
 import CheckQr from "../screens/qr/CheckQr";
+import { useSelector } from "react-redux";
 
 const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
+  const { schedule } = useSelector((state) => state);
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -87,12 +89,19 @@ const Navigator = () => {
             },
             headerShown: true,
             headerBackVisible: false,
-            headerTitle: (props) => (
-              <Text
-                style={{ fontFamily: "LexendDeca_600SemiBold", fontSize: 18 }}>
-                Check In
-              </Text>
-            ),
+            headerTitle: (props) => {
+              return (
+                <Text
+                  style={{
+                    fontFamily: "LexendDeca_600SemiBold",
+                    fontSize: 18,
+                  }}>
+                  {schedule.scheduleFuture.status === "checkin"
+                    ? "Check out"
+                    : "Check in"}
+                </Text>
+              );
+            },
             headerTitleAlign: "center",
             headerShadowVisible: true,
             headerStyle: {

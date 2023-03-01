@@ -11,12 +11,27 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import SvgScan from "../../svg/home/svgScan";
 import SvgScanQr from "../../svg/svgScanQr";
 import ModalSuccessCheck from "../../components/modal/modalSuccessCheck";
+import { useNavigation } from "@react-navigation/native";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  checkQrAction,
+  scheduleFutureAction,
+} from "../../store/actions/scheduleAction";
+import ModalFailCheck from "../../components/modal/modalFailCheck";
 
 // create a component
 const CheckQr = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [showModalCheckQr, setShowModalCheckQr] = useState(false);
+  const [showModalFailQr, setShowModalFailQr] = useState(false);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const { schedule } = useSelector((state) => state);
 
   useEffect(() => {
     const getBarCodeScannerPermissions = async () => {
@@ -27,9 +42,31 @@ const CheckQr = () => {
     getBarCodeScannerPermissions();
   }, []);
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
-    alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    if (schedule.scheduleFuture.status === "pending") {
+      const res = await dispatch(checkQrAction(data, navigation, "checkin"));
+
+      if (res?.["academy.trainer.booking"]) {
+        setTitle("Check-in thành công");
+        setContent("Tiếp tục tập luyện thật chăm chỉ nào!");
+        dispatch(scheduleFutureAction(navigation));
+        setShowModalCheckQr(true);
+      } else {
+        setShowModalFailQr(true);
+      }
+    } else {
+      const res = await dispatch(checkQrAction(data, navigation, "checkout"));
+
+      if (res?.["academy.trainer.booking"]) {
+        setTitle("Check-out thành công");
+        setContent("Bạn đã tập luyện rất chăm chỉ, hãy cố gắng hơn nữa nhé!");
+        dispatch(scheduleFutureAction(navigation));
+        setShowModalCheckQr(true);
+      } else {
+        setShowModalFailQr(true);
+      }
+    }
   };
 
   if (hasPermission === null) {
@@ -39,8 +76,7 @@ const CheckQr = () => {
     return <Text style={styles.textQR}>No access to camera</Text>;
   }
 
-  const handleCheckQr = () => {
-    setShowModalCheckQr(true);
+  const handleCheckQr = async () => {
     setScanned(false);
   };
   return (
@@ -48,8 +84,16 @@ const CheckQr = () => {
       <ModalSuccessCheck
         showModalSuccess={showModalCheckQr}
         setShowModalSuccess={setShowModalCheckQr}
-        titleName={"Check-in thành công"}
-        ContentBody={"Tiếp tục tập luyện thật chăm chỉ nào!"}
+        titleName={title}
+        ContentBody={content}
+        setScanned={setScanned}
+      />
+      <ModalFailCheck
+        showModalFail={showModalFailQr}
+        setShowModalFail={setShowModalFailQr}
+        titleName={"Check-in thất bại"}
+        ContentBody={"Xin vui lòng thử lại!"}
+        setScanned={setScanned}
       />
       <Text style={styles.textTitle}>
         Quét mã QR bằng thiết bị của bạn để check-in
@@ -67,19 +111,18 @@ const CheckQr = () => {
           style={{ width: 300, height: 400 }}
         />
       </View>
-      {scanned || (
-        <TouchableOpacity
-          title={"Tap to Scan Again"}
-          onPress={handleCheckQr}
-          style={{
-            marginTop: 40,
-            backgroundColor: "#688338",
-            padding: 10,
-            borderRadius: 50,
-          }}>
-          <SvgScanQr size={30} fill={"#fff"} />
-        </TouchableOpacity>
-      )}
+
+      <TouchableOpacity
+        title={"Tap to Scan Again"}
+        onPress={handleCheckQr}
+        style={{
+          marginTop: 40,
+          backgroundColor: "#688338",
+          padding: 10,
+          borderRadius: 50,
+        }}>
+        <SvgScanQr size={30} fill={"#fff"} />
+      </TouchableOpacity>
     </View>
   );
 };
