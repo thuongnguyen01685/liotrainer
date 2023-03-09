@@ -10,11 +10,13 @@ import SvgNotify from "../../svg/home/svgNotify";
 import SvgHand from "../../svg/home/svgHand";
 import SvgScan from "../../svg/home/svgScan";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 const Header = () => {
   const { infoUser } = useSelector((state) => state.user);
   const [showModalNotify, setShowModalNotify] = useState(false);
   const navigation = useNavigation();
+  const { t, i18n } = useTranslation();
 
   const timeNow = () => {
     let time = moment().format("HH:mm:ss");
@@ -62,7 +64,7 @@ const Header = () => {
                 fontFamily: "LexendDeca_500Medium",
                 color: "#fff",
               }}>
-              {timeNow()}
+              {t(timeNow())}
               <Text
                 style={{
                   fontSize: 14,

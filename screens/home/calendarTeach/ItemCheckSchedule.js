@@ -14,7 +14,9 @@ import {
 import {
   checkScheduleAction,
   scheduleFutureAction,
+  scheduleListAction,
 } from "../../../store/actions/scheduleAction";
+import { useTranslation } from "react-i18next";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
@@ -28,21 +30,28 @@ const ItemCheckSchedule = (props) => {
   } = props;
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const { t, i18n } = useTranslation();
 
   const handleCheckIn = async (id) => {
     await dispatch(checkScheduleAction(id, "checkin", navigation));
     await setShowModalSuccess(true);
     await dispatch(scheduleFutureAction(navigation));
+    await dispatch(scheduleListAction(navigation));
   };
   const handleCheckOut = async (id) => {
     await dispatch(checkScheduleAction(id, "checkout", navigation));
     await setShowModalCheckout(true);
     await dispatch(scheduleFutureAction(navigation));
+    await dispatch(scheduleListAction(navigation));
   };
   const handleCancel = async (id) => {
     await dispatch(checkScheduleAction(id, "cancel", navigation));
+
     await dispatch(scheduleFutureAction(navigation));
+
+    await dispatch(scheduleListAction(navigation));
   };
+
   return (
     <ImageBackground
       source={require("../../../assets/backgroundSchedule.png")}
@@ -50,7 +59,7 @@ const ItemCheckSchedule = (props) => {
       <View style={styles.viewTime}>
         <View>
           <Text style={styles.dateText}>
-            {item.date && formatDate(item.date, "thu")}
+            {item.date && t(formatDate(item.date, "thu"))}
           </Text>
           <Text style={styles.dateText}>
             {item.date && formatDateDisplays2(item.date, "/")}
@@ -65,7 +74,7 @@ const ItemCheckSchedule = (props) => {
           <SvgLocation />
           <Text style={styles.textAddress}>
             {item.length !== 0
-              ? item.location_detail_id[1] + " - " + item.location_id[1]
+              ? item?.location_detail_id[1] + " - " + item?.location_id[1]
               : ""}
           </Text>
         </View>
@@ -105,7 +114,7 @@ const ItemCheckSchedule = (props) => {
             <TouchableOpacity
               style={[styles.btn, { backgroundColor: "#AFAFAF" }]}
               onPress={() => handleCancel(item.id)}>
-              <Text style={styles.textbtn}>Hủy dạy</Text>
+              <Text style={styles.textbtn}>{t("Hủy dạy")}</Text>
             </TouchableOpacity>
           </View>
         )}

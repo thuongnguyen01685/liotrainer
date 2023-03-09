@@ -23,13 +23,16 @@ import {
   formatDate,
   formatDateDisplays2,
   formatTimeDisplay,
+  getTime,
 } from "../../../utils/datetime";
+import { useTranslation } from "react-i18next";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
 const DetailSchedule = () => {
   const navigation = useNavigation();
   const { schedule } = useSelector((state) => state);
+  const { t } = useTranslation();
 
   return (
     <ImageBackground
@@ -56,7 +59,7 @@ const DetailSchedule = () => {
             />
           </View>
           <Text style={styles.textIcon}>
-            {/* {formatDate(schedule.detailSchedule.date, "thu")}{" "} */} Thứ 5{" "}
+            {/* {formatDate(schedule.detailSchedule.date.replace("/", "-"), "thu")}{" "} */}
             {schedule.detailSchedule.date}
           </Text>
         </View>
@@ -85,7 +88,8 @@ const DetailSchedule = () => {
             />
           </View>
           <Text style={styles.textIcon}>
-            {/* {formatTimeDisplay(schedule.detailSchedule.date_start)} */} 7:30
+            {/* {formatTimeDisplay(schedule.detailSchedule.date_start)} */}{" "}
+            {getTime(schedule.detailSchedule.time)}
           </Text>
         </View>
         {/* hocvien */}
@@ -97,7 +101,7 @@ const DetailSchedule = () => {
             />
           </View>
           <Text style={styles.textIcon}>
-            {schedule.detailSchedule?.trainee?.length} Học Viên
+            {schedule.detailSchedule?.trainee?.length} {t("Học Viên")}
           </Text>
         </View>
       </View>

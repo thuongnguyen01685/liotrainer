@@ -9,10 +9,12 @@ import {
   Image,
 } from "react-native";
 import Modal from "react-native-modal";
+import { useTranslation } from "react-i18next";
 
 const { width } = Dimensions.get("window");
 const ModalSuccessCheck = (props) => {
   const navi = useNavigation();
+  const { t, i18n } = useTranslation();
   const {
     showModalSuccess,
     setShowModalSuccess,
@@ -20,6 +22,7 @@ const ModalSuccessCheck = (props) => {
     ContentBody,
     setScanned,
     goHome,
+    textBtn,
   } = props;
 
   return (
@@ -68,7 +71,7 @@ const ModalSuccessCheck = (props) => {
               color: "#000",
               marginBottom: 13,
             }}>
-            {titleName}
+            {t(titleName)}
           </Text>
           <Text
             style={{
@@ -77,7 +80,7 @@ const ModalSuccessCheck = (props) => {
               textAlign: "center",
               marginHorizontal: 17,
             }}>
-            {ContentBody}
+            {t(ContentBody)}
           </Text>
         </View>
 
@@ -100,7 +103,7 @@ const ModalSuccessCheck = (props) => {
               if (goHome) {
                 navi.goBack();
               } else {
-                navi.navigate("CheckSchedule");
+                navi.navigate("TabBar");
               }
             }}>
             <Text
@@ -109,7 +112,7 @@ const ModalSuccessCheck = (props) => {
                 fontFamily: "LexendDeca_400Regular",
                 color: "#fff",
               }}>
-              Tiếp tục
+              {textBtn ? t(textBtn) : t("Tiếp tục")}
             </Text>
           </TouchableOpacity>
         </View>

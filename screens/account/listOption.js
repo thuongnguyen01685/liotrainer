@@ -10,12 +10,13 @@ import SvgPolicyTerms from "../../svg/account/svgPolicyTerms";
 export const workoutRecords = [
   {
     icon: <SvgLayer />,
-    title: "Gói tập của bạn",
-    //link: "MyPackages",
+    title: "Lịch dạy",
+    link: "Schedule",
   },
   {
     icon: <SvgFlag />,
-    title: "Tiến độ tập luyện",
+    title: "Khóa học",
+    link: "Course",
   },
 ];
 

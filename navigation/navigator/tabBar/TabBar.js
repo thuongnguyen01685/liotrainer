@@ -28,12 +28,14 @@ import SvgCourseFocus from "../../../svg/course/SvgCourseFocus";
 import SvgCourse from "../../../svg/course/SvgCourse";
 import Booking from "../../../screens/booking/Booking";
 import { Ionicons } from "@expo/vector-icons";
-
+import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 const Tab = createBottomTabNavigator();
 
 // create a component
 const TabBar = () => {
   const navigation = useNavigation();
+  const { t, i18n } = useTranslation();
   const renderTabBar = ({ routeName, selectedTab, navigate }) => {
     return (
       <>
@@ -54,7 +56,7 @@ const TabBar = () => {
                 styles.textTab,
                 { color: selectedTab === "Home" ? "#688338" : "#8E8E8E" },
               ]}>
-              Trang chủ
+              {t("Trang chủ")}
             </Text>
           </TouchableOpacity>
         )}
@@ -76,7 +78,7 @@ const TabBar = () => {
                 styles.textTab,
                 { color: selectedTab === "Schedule" ? "#688338" : "#8E8E8E" },
               ]}>
-              Lịch dạy
+              {t("Lịch dạy")}
             </Text>
           </TouchableOpacity>
         )}
@@ -104,7 +106,7 @@ const TabBar = () => {
                 styles.textTab,
                 { color: selectedTab === "Course" ? "#688338" : "#8E8E8E" },
               ]}>
-              Khóa học
+              {t("Khóa học")}
             </Text>
           </TouchableOpacity>
         )}
@@ -125,13 +127,14 @@ const TabBar = () => {
                 styles.textTab,
                 { color: selectedTab === "Account" ? "#688338" : "#8E8E8E" },
               ]}>
-              Tài khoản
+              {t("Tài khoản")}
             </Text>
           </TouchableOpacity>
         )}
       </>
     );
   };
+
   return (
     <CurvedBottomBar.Navigator
       style={styles.bottomBar}
@@ -165,13 +168,12 @@ const TabBar = () => {
         component={Schedule}
         position="LEFT"
         options={{
-          title: "Lịch dạy",
           headerShown: true,
           headerBackVisible: false,
           headerTitle: (props) => (
             <Text
               style={{ fontFamily: "LexendDeca_600SemiBold", fontSize: 18 }}>
-              Lịch dạy
+              {t("Lịch dạy")}
             </Text>
           ),
           headerTitleAlign: "center",
@@ -200,7 +202,7 @@ const TabBar = () => {
           headerTitle: (props) => (
             <Text
               style={{ fontFamily: "LexendDeca_600SemiBold", fontSize: 18 }}>
-              Khóa học
+              {t("Khóa học")}
             </Text>
           ),
           headerTitleAlign: "center",
@@ -228,7 +230,7 @@ const TabBar = () => {
           headerTitle: (props) => (
             <Text
               style={{ fontFamily: "LexendDeca_600SemiBold", fontSize: 18 }}>
-              Tài khoản
+              {t("Tài khoản")}
             </Text>
           ),
           headerTitleAlign: "center",

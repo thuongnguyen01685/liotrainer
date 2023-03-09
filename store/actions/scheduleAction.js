@@ -14,8 +14,9 @@ export const scheduleFutureAction = (navigate) => async (dispatch) => {
     let temp = await AsyncStorage.getItem("token");
     const token = await JSON.parse(temp);
 
+    console.log(token.access_token, "token");
     const res = await callApi(
-      `restapi/1.0/object/academy.trainer.booking?domain=[('status','!=','cancel'),('status','!=','checkout')]&order=date_start&limit=1`,
+      `restapi/1.0/object/academy.trainer.booking?domain=[('status','!=','cancel'),('status','!=','checkout'),('trainer_id','=',${token.trainer_id})]&order=date_start&limit=1`,
       "GET",
       "",
       {
@@ -25,6 +26,7 @@ export const scheduleFutureAction = (navigate) => async (dispatch) => {
 
     if (res.code === 401) {
       dispatch(refreshTokenAction(navigate));
+      dispatch(scheduleFutureAction(navigate));
     } else {
       if (res?.data?.["academy.trainer.booking"]) {
         //console.log(res.data?.["academy.trainer.booking"], "data333");
@@ -32,6 +34,7 @@ export const scheduleFutureAction = (navigate) => async (dispatch) => {
         return res?.data?.["academy.trainer.booking"];
       } else {
         console.log(res, "academy.trainer.booking");
+        dispatch(getScheduleFuture([]));
       }
     }
   } catch (error) {
@@ -47,13 +50,14 @@ export const scheduleListAction = (navigate) => async (dispatch) => {
     const res = await callApi(
       `restapi/1.0/object/academy.trainer.booking?domain=[('status','!=','cancel'),('status','!=','checkout'),('date_start','>=','${formatDateTimeDisplay(
         moment()
-      )}')]&order=date_start`,
+      )}'),('trainer_id','=',${token.trainer_id})]&order=date_start`,
       "GET",
       "",
       {
         "X-Authorization": `Bearer ${token.access_token}`,
       }
     );
+
     if (res.code === 401) {
       dispatch(refreshTokenAction(navigate));
     } else {
@@ -61,6 +65,7 @@ export const scheduleListAction = (navigate) => async (dispatch) => {
         dispatch(getScheduleList(res.data?.["academy.trainer.booking"]));
         return res.data?.["academy.trainer.booking"];
       } else {
+        dispatch(getScheduleList(res));
         console.log(res, "academy.trainer.booking");
       }
     }
@@ -111,6 +116,7 @@ export const checkScheduleAction =
         await dispatch(refreshTokenAction(navigate));
       } else {
         scheduleFutureAction(navigate);
+        scheduleListAction(navigate);
       }
     } catch (error) {
       console.log(error);
@@ -124,7 +130,7 @@ export const checkQrAction =
       const token = await JSON.parse(temp);
 
       const resQr = await callApi(
-        `restapi/1.0/object/academy.trainer.booking?domain=[('trainer_id','=',15),('schedule_booking_id.code','=','${dataQr}')]&fields=['id']`,
+        `restapi/1.0/object/academy.trainer.booking?domain=[('trainer_id','=',${token.trainer_id}),('schedule_booking_id.code','=','${dataQr}')]&fields=['id']`,
         "GET",
         "",
         {
@@ -148,6 +154,7 @@ export const checkQrAction =
           await dispatch(refreshTokenAction(navigate));
         } else {
           scheduleFutureAction(navigate);
+          scheduleListAction(navigate);
           return res.data;
         }
       }

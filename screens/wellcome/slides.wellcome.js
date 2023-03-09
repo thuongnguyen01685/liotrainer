@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Image, StyleSheet, View, Text, Dimensions } from "react-native";
 const { width, height } = Dimensions.get("window");
 export const slides = [
@@ -16,6 +17,7 @@ export const slides = [
 ];
 
 export const Slide = ({ item }) => {
+  const { t, i18n } = useTranslation();
   return (
     <View style={{ alignItems: "center" }}>
       <Image
@@ -23,12 +25,12 @@ export const Slide = ({ item }) => {
         style={{ width, height: height * 0.4, resizeMode: "cover" }}
       />
       <View style={{ width }}>
-        <Text style={styles.title}>
-          Chào mừng đến Học viện đào tạo golf -{" "}
+        <Text style={styles.title}>{t("Chào mừng đến Học viện đào tạo golf")}
+           -{" "}
           <Text style={{ color: "#688338" }}>The Golf House Academy</Text>
         </Text>
         <Text style={styles.subtitle}>
-          Ứng dụng hàng đầu về Golf và đào tạo Golf cho người Việt.
+        {t("Ứng dụng hàng đầu về Golf và đào tạo Golf cho người Việt.")}
         </Text>
       </View>
     </View>
@@ -47,7 +49,6 @@ const styles = StyleSheet.create({
   title: {
     color: "#000",
     fontSize: 19,
-    fontWeight: "bold",
     lineHeight: 24,
     fontFamily: "LexendDeca_600SemiBold",
     textAlign: "center",

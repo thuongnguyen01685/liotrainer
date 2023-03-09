@@ -10,10 +10,12 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 import { Ionicons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 const { width } = Dimensions.get("window");
 const ModalFailCheck = (props) => {
   const navi = useNavigation();
+  const { t, i18n } = useTranslation();
   const {
     showModalFail,
     setShowModalFail,
@@ -97,7 +99,7 @@ const ModalFailCheck = (props) => {
                 fontFamily: "LexendDeca_400Regular",
                 color: "#fff",
               }}>
-              Thử lại
+              {t("Thử lại")}
             </Text>
           </TouchableOpacity>
         </View>

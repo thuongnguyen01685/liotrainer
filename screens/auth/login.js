@@ -48,9 +48,10 @@ export default function Login() {
   const login = async () => {
     await setShowLoading(true);
     const res = await dispatch(loginUserAction({ username, password }));
+
     if (res?.id) {
       await AsyncStorage.setItem("token", JSON.stringify(res));
-      await dispatch(getInfoUserAction(res.trainee_id));
+      await dispatch(getInfoUserAction(res.trainer_id));
       await setShowLoading(false);
       navi.navigate("TabBar");
     } else {
@@ -68,8 +69,7 @@ export default function Login() {
       enableOnAndroid={true}
       keyboardShouldPersistTaps="handled"
       scrollEnabled={true}
-      contentContainerStyle={styles.container}
-    >
+      contentContainerStyle={styles.container}>
       {showLoading ? (
         <View
           style={{
@@ -82,8 +82,7 @@ export default function Login() {
             zIndex: 20,
             justifyContent: "center",
             alignItems: "center",
-          }}
-        >
+          }}>
           <ActivityIndicator size="large" color="#00ff00" />
         </View>
       ) : null}
@@ -138,8 +137,7 @@ export default function Login() {
             textAlign: "center",
             marginVertical: 32,
             color: "#688338",
-          }}
-        >
+          }}>
           Đăng nhập
         </Text>
         <View style={styles.viewInput}>
@@ -155,8 +153,7 @@ export default function Login() {
           style={[
             styles.viewInput,
             { flexDirection: "row", justifyContent: "space-between" },
-          ]}
-        >
+          ]}>
           <TextInput
             maxLength={52}
             placeholder="Mật khẩu"
@@ -176,7 +173,7 @@ export default function Login() {
             </TouchableOpacity>
           )}
         </View>
-        <View
+        {/* <View
           style={{
             marginHorizontal: 20,
             marginTop: 5,
@@ -220,19 +217,17 @@ export default function Login() {
           >
             Quên mật khẩu?
           </Text>
-        </View>
+        </View> */}
       </View>
       <TouchableOpacity
         style={[styles.button, { backgroundColor: "#688338" }]}
-        onPress={() => login()}
-      >
+        onPress={() => login()}>
         <Text
           style={{
             fontSize: 20,
             color: "#ffffff",
             fontFamily: "LexendDeca_400Regular",
-          }}
-        >
+          }}>
           Đăng nhập
         </Text>
       </TouchableOpacity>

@@ -29,13 +29,21 @@ import ItemBooking from "./itemBooking";
 import ModalSuccessCheck from "../../components/modal/modalSuccessCheck";
 import { formatDateDisplays } from "../../utils/datetime";
 import { Dimensions } from "react-native";
+import { useTranslation } from "react-i18next";
+import {
+  scheduleFutureAction,
+  scheduleListAction,
+} from "../../store/actions/scheduleAction";
 
 const { width, height } = Dimensions.get("window");
 export default function Booking(props) {
   const navigation = useNavigation();
+
+  const { t, i18n } = useTranslation();
   //redux
   const dispatch = useDispatch();
   const { changeToken } = useSelector((state) => state.refreshToken);
+
   //state
 
   const [month, setMonth] = useState(moment().format());
@@ -136,12 +144,14 @@ export default function Booking(props) {
   };
 
   const handlePostBooking = async () => {
+    let temp = await AsyncStorage.getItem("token");
+    const token = await JSON.parse(temp);
     const vals = {
       location_id: dataDetail.location_id[0],
       location_detail_id: dataDetail.location_detail_id[0],
       program_id: dataDetail.program_id[0],
       course_id: dataDetail.course_id[0],
-      trainer_id: 5,
+      trainer_id: token.trainer_id,
       date: dataDetail.date,
       start_time: dataDetail.start_time,
       end_time: dataDetail.end_time,
@@ -151,6 +161,8 @@ export default function Booking(props) {
     const res = await dispatch(bookingAction(vals, navigation));
     if (res) {
       setShowModalBookingSuccess(true);
+      await dispatch(scheduleFutureAction(navigation));
+      await dispatch(scheduleListAction(navigation));
     }
   };
 
@@ -159,8 +171,8 @@ export default function Booking(props) {
       <ModalSuccessCheck
         showModalSuccess={showModalBookingSuccess}
         setShowModalSuccess={setShowModalBookingSuccess}
-        titleName={"Đặt lịch thành công"}
-        ContentBody={"Vui lòng đến tập đúng như thời gian đã đặt"}
+        titleName={t("Đặt lịch thành công")}
+        ContentBody={t("Vui lòng đến tập đúng như thời gian đã đặt")}
         goHome={true}
       />
       {showModalAlert && (
@@ -212,7 +224,7 @@ export default function Booking(props) {
                 opacity: 0.5,
                 marginTop: 5,
               }}>
-              Không có dữ liệu...
+              {t("Không có dữ liệu...")}
             </Text>
           </View>
         )}
@@ -237,7 +249,7 @@ export default function Booking(props) {
               fontFamily: "LexendDeca_400Regular",
             }}
             value={note}
-            placeholder={"Thêm ghi chú"}
+            placeholder={t("Thêm ghi chú...")}
             onChangeText={(note) => setNote(note)}
           />
         </View>
@@ -251,7 +263,7 @@ export default function Booking(props) {
               color: "#ffffff",
               fontFamily: "LexendDeca_400Regular",
             }}>
-            Xác nhận đặt lịch
+            {t("Xác nhận đặt lịch")}
           </Text>
         </TouchableOpacity>
       </View>

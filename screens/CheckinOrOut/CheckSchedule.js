@@ -4,20 +4,22 @@ import { View, Text, StyleSheet } from "react-native";
 import ModalSuccessCheck from "../../components/modal/modalSuccessCheck";
 import ItemCheckSchedule from "../home/calendarTeach/ItemCheckSchedule";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 // create a component
 const CheckSchedule = () => {
   const [showModalCheckIn, setShowModalCheckIn] = useState(false);
   const [showModalCheckout, setShowModalCheckout] = useState(false);
   const { schedule } = useSelector((state) => state);
+  const { t, i18n } = useTranslation();
   return (
     <View style={styles.container}>
       {showModalCheckIn && (
         <ModalSuccessCheck
           showModalSuccess={showModalCheckIn}
           setShowModalSuccess={setShowModalCheckIn}
-          titleName={"Check-in thành công"}
-          ContentBody={"Tiếp tục tập luyện thật chăm chỉ nào!"}
+          titleName={t("Check-in thành công")}
+          ContentBody={t("Tiếp tục tập luyện thật chăm chỉ nào!")}
         />
       )}
 
@@ -25,10 +27,11 @@ const CheckSchedule = () => {
         <ModalSuccessCheck
           showModalSuccess={showModalCheckout}
           setShowModalSuccess={setShowModalCheckout}
-          titleName={"Check-out thành công"}
-          ContentBody={
+          titleName={t("Check-out thành công")}
+          ContentBody={t(
             "Bạn đã tập luyện rất chăm chỉ, hãy cố gắng hơn nữa nhé!"
-          }
+          )}
+          goHome={true}
         />
       )}
 
