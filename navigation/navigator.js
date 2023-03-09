@@ -12,11 +12,15 @@ import { Ionicons } from "@expo/vector-icons";
 import CheckSchedule from "../screens/CheckinOrOut/CheckSchedule";
 import CheckQr from "../screens/qr/CheckQr";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import DetailCourse from "../screens/courses/detailCourse/detailCourse";
+import Assessment from "../screens/home/student/assessment/assessment";
 
 const Stack = createNativeStackNavigator();
 
 const Navigator = () => {
   const { schedule } = useSelector((state) => state);
+  const { t, i18n } = useTranslation();
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -34,7 +38,6 @@ const Navigator = () => {
           name="Booking"
           component={Booking}
           options={{
-            title: "Lịch tập",
             headerLeft: () => {
               const navigation = useNavigation();
               return (
@@ -48,7 +51,7 @@ const Navigator = () => {
             headerTitle: (props) => (
               <Text
                 style={{ fontFamily: "LexendDeca_600SemiBold", fontSize: 18 }}>
-                Lịch tập
+                {t("Đặt lịch")}
               </Text>
             ),
             headerTitleAlign: "center",
@@ -75,6 +78,12 @@ const Navigator = () => {
           component={DetailStudent}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="DetailCourse"
+          component={DetailCourse}
+          options={{ headerShown: false }}
+        />
+
         <Stack.Screen
           name="CheckSchedule"
           component={CheckSchedule}
@@ -133,7 +142,41 @@ const Navigator = () => {
             headerTitle: (props) => (
               <Text
                 style={{ fontFamily: "LexendDeca_600SemiBold", fontSize: 18 }}>
-                Quét mã QR
+                {t("Quét mã QR")}
+              </Text>
+            ),
+            headerTitleAlign: "center",
+            headerShadowVisible: true,
+            headerStyle: {
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 1,
+                height: 5,
+              },
+              shadowOpacity: 0.25,
+              shadowRadius: 4.0,
+              elevation: 1.5,
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Assessment"
+          component={Assessment}
+          options={{
+            headerLeft: () => {
+              const navigation = useNavigation();
+              return (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Ionicons name="chevron-back" size={30} color="#000" />
+                </TouchableOpacity>
+              );
+            },
+            headerShown: true,
+            headerBackVisible: false,
+            headerTitle: (props) => (
+              <Text
+                style={{ fontFamily: "LexendDeca_600SemiBold", fontSize: 18 }}>
+                {t("Đánh giá học viên")}
               </Text>
             ),
             headerTitleAlign: "center",

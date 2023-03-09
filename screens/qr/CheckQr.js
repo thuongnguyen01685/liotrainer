@@ -18,6 +18,8 @@ import {
   scheduleFutureAction,
 } from "../../store/actions/scheduleAction";
 import ModalFailCheck from "../../components/modal/modalFailCheck";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 // create a component
 const CheckQr = () => {
@@ -29,6 +31,7 @@ const CheckQr = () => {
   const [content, setContent] = useState("");
 
   const navigation = useNavigation();
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
 
   const { schedule } = useSelector((state) => state);
@@ -48,8 +51,8 @@ const CheckQr = () => {
       const res = await dispatch(checkQrAction(data, navigation, "checkin"));
 
       if (res?.["academy.trainer.booking"]) {
-        setTitle("Check-in thành công");
-        setContent("Tiếp tục tập luyện thật chăm chỉ nào!");
+        setTitle(t("Check-in thành công"));
+        setContent(t("Tiếp tục tập luyện thật chăm chỉ nào!"));
         dispatch(scheduleFutureAction(navigation));
         setShowModalCheckQr(true);
       } else {
@@ -59,8 +62,10 @@ const CheckQr = () => {
       const res = await dispatch(checkQrAction(data, navigation, "checkout"));
 
       if (res?.["academy.trainer.booking"]) {
-        setTitle("Check-out thành công");
-        setContent("Bạn đã tập luyện rất chăm chỉ, hãy cố gắng hơn nữa nhé!");
+        setTitle(t("Check-out thành công"));
+        setContent(
+          t("Bạn đã tập luyện rất chăm chỉ, hãy cố gắng hơn nữa nhé!")
+        );
         dispatch(scheduleFutureAction(navigation));
         setShowModalCheckQr(true);
       } else {
@@ -91,12 +96,12 @@ const CheckQr = () => {
       <ModalFailCheck
         showModalFail={showModalFailQr}
         setShowModalFail={setShowModalFailQr}
-        titleName={"Check-in thất bại"}
-        ContentBody={"Xin vui lòng thử lại!"}
+        titleName={t("Check-in thất bại")}
+        ContentBody={t("Xin vui lòng thử lại!")}
         setScanned={setScanned}
       />
       <Text style={styles.textTitle}>
-        Quét mã QR bằng thiết bị của bạn để check-in
+        {t("Quét mã QR bằng thiết bị của bạn để check-in")}
       </Text>
       <View
         style={{

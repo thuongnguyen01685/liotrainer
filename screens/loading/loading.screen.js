@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getInfoUserAction } from "../../store/actions/user.actions";
+import { changeLanguageAction } from "../../store/actions/system.action";
 
 export default function LoadingScreen() {
   const navigate = useNavigation();
@@ -13,9 +14,12 @@ export default function LoadingScreen() {
       let temp = await AsyncStorage.getItem("token");
       const token = await JSON.parse(temp);
       if (token) {
-        await dispatch(getInfoUserAction(token.trainee_id));
+        const lang = await AsyncStorage.getItem("lang");
+        await dispatch(changeLanguageAction(lang));
+        await dispatch(getInfoUserAction(token.trainer_id));
         navigate.navigate("TabBar");
       } else {
+        await dispatch(changeLanguageAction("vi"));
         navigate.navigate("wellcome");
       }
     };
@@ -26,16 +30,14 @@ export default function LoadingScreen() {
       style={{
         flex: 1,
         backgroundColor: "#fff",
-      }}
-    >
+      }}>
       <View
         style={{
           marginTop: 200,
           paddingHorizontal: 47,
           flexDirection: "column",
           alignItems: "center",
-        }}
-      >
+        }}>
         <Image
           source={require("../../assets/splash.png")}
           style={{ width: 280, height: 280 }}
@@ -48,8 +50,7 @@ export default function LoadingScreen() {
           flexDirection: "row",
           justifyContent: "center",
           marginTop: 100,
-        }}
-      >
+        }}>
         <Image
           source={require("../../assets/loading.gif")}
           style={{

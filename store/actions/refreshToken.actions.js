@@ -10,7 +10,7 @@ export const refreshTokenAction = (navigate) => {
       const token = await JSON.parse(temp);
       const res = await callApi(
         `newtoken?refresh_token=${token.refresh_token}`,
-        "GET",
+        "GET"
       );
       if (res.data) {
         const res1 = res.data;
@@ -18,9 +18,9 @@ export const refreshTokenAction = (navigate) => {
           "token",
           JSON.stringify({
             id: token.id,
-            trainee_id: token.trainee_id,
+            trainer_id: token.trainer_id,
             ...res1,
-          }),
+          })
         );
         await dispatch(setRefreshToken());
       } else {

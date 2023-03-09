@@ -23,11 +23,17 @@ const Course = () => {
     async function it() {
       await setRefresing(true);
       const res = await dispatch(ListCourseAction(navigation));
-      if (res?.length > 0) {
-        setArrCourse(res);
+
+      if (res) {
+        if (res?.length > 0) {
+          setArrCourse(res);
+        } else {
+          setArrCourse([res]);
+        }
       } else {
-        setArrCourse([res]);
+        setArrCourse([]);
       }
+
       await setRefresing(false);
     }
     it();
@@ -37,10 +43,14 @@ const Course = () => {
     async function it() {
       await setRefresing(true);
       const res = await dispatch(ListCourseAction(navigation));
-      if (res?.length > 0) {
-        setArrCourse(res);
+      if (res) {
+        if (res?.length > 0) {
+          setArrCourse(res);
+        } else {
+          setArrCourse([res]);
+        }
       } else {
-        setArrCourse([res]);
+        setArrCourse([]);
       }
       await setRefresing(false);
     }

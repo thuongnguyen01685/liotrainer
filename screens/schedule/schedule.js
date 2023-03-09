@@ -16,14 +16,12 @@ import {
   scheduleFutureAction,
   scheduleListAction,
 } from "../../store/actions/scheduleAction";
-import { color } from "react-native-elements/dist/helpers";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
 const Schedule = () => {
   const navigation = useNavigation();
   const [refreshing, setRefresing] = useState(false);
-  const [arrSchedule, setArrSchedule] = useState([]);
 
   const dispatch = useDispatch();
   const { schedule } = useSelector((state) => state);
@@ -31,28 +29,16 @@ const Schedule = () => {
   useEffect(() => {
     async function it() {
       await setRefresing(true);
-      const res = await dispatch(scheduleListAction(navigation));
-
-      if (res.length > 1) {
-        setArrSchedule(res);
-      } else {
-        setArrSchedule([res]);
-      }
-
+      await dispatch(scheduleListAction(navigation));
       await setRefresing(false);
     }
     it();
-  }, []);
+  }, [dispatch]);
 
   const onRefresh = React.useCallback(() => {
     async function it() {
       await setRefresing(true);
-      const res = await dispatch(scheduleListAction(navigation));
-      if (res.length > 0) {
-        setArrSchedule(res);
-      } else {
-        setArrSchedule([res]);
-      }
+      await dispatch(scheduleListAction(navigation));
 
       await setRefresing(false);
     }
@@ -62,9 +48,9 @@ const Schedule = () => {
   return (
     <View style={styles.container}>
       <View style={{ marginBottom: "15%" }}>
-        {arrSchedule.length > 0 ? (
+        {schedule.scheduleList.length > 0 ? (
           <FlatList
-            data={arrSchedule}
+            data={schedule.scheduleList}
             renderItem={({ item, index }) => (
               <ItemSchedule item={item} key={index} />
             )}

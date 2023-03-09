@@ -21,6 +21,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { scheduleFutureAction } from "../../store/actions/scheduleAction";
 import ModalSuccessCheck from "../../components/modal/modalSuccessCheck";
 import { CourseRunningAction } from "../../store/actions/coursesAction";
+import { useTranslation } from "react-i18next";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { changeLanguageAction } from "../../store/actions/system.action";
+import ListStudent from "./student/listStudent";
+import { getInfoUserAction } from "../../store/actions/user.actions";
+import { getListStudentTodayAction } from "../../store/actions/booking.actions";
 
 const dataBox = [
   {
@@ -34,7 +40,7 @@ const dataBox = [
     navi: "Schedule",
   },
   {
-    title: "Lịch tập",
+    title: "Đặt lịch",
     img: require("../../assets/imghome/lichtap.png"),
     navi: "Booking",
   },
@@ -43,7 +49,7 @@ const dataBox = [
 const { width, height } = Dimensions.get("screen");
 const Home = () => {
   const navigation = useNavigation();
-
+  const { t, i18n } = useTranslation();
   const dispatch = useDispatch();
   const { user, schedule } = useSelector((state) => state);
   const [refreshing, setRefresing] = useState(false);
@@ -53,39 +59,26 @@ const Home = () => {
 
   useEffect(() => {
     async function it() {
+      const lang = await AsyncStorage.getItem("lang");
+      await dispatch(changeLanguageAction(lang));
       setRefresing(true);
       dispatch(scheduleFutureAction(navigation));
-      const res = await dispatch(CourseRunningAction(navigation));
-
-      if (res) {
-        if (res.length > 0) {
-          setDataCourseRunning(res);
-        } else {
-          setDataCourseRunning([res]);
-        }
-      } else {
-        setDataCourseRunning([]);
-      }
-
+      dispatch(getListStudentTodayAction(navigation));
       setRefresing(false);
     }
     it();
-  }, [dispatch]);
+  }, [dispatch, schedule.getScheduleFuture]);
 
   const onRefresh = React.useCallback(() => {
     async function it() {
       setRefresing(true);
+      let temp = await AsyncStorage.getItem("token");
+      const token = await JSON.parse(temp);
+      await dispatch(getInfoUserAction(token.trainer_id));
+      const lang = await AsyncStorage.getItem("lang");
+      await dispatch(changeLanguageAction(lang));
       dispatch(scheduleFutureAction(navigation));
-      const res = await dispatch(CourseRunningAction(navigation));
-      if (res) {
-        if (res.length > 0) {
-          setDataCourseRunning(res);
-        } else {
-          setDataCourseRunning([res]);
-        }
-      } else {
-        setDataCourseRunning([]);
-      }
+      dispatch(getListStudentTodayAction(navigation));
       setRefresing(false);
     }
     it();
@@ -119,24 +112,24 @@ const Home = () => {
           <ModalSuccessCheck
             showModalSuccess={showModalCheckIn}
             setShowModalSuccess={setShowModalCheckIn}
-            titleName={"Check-in thành công"}
-            ContentBody={"Tiếp tục tập luyện thật chăm chỉ nào!"}
+            titleName={t("Check-in thành công")}
+            ContentBody={t("Tiếp tục tập luyện thật chăm chỉ nào!")}
           />
         )}
         {showModalCheckout && (
           <ModalSuccessCheck
             showModalSuccess={showModalCheckout}
             setShowModalSuccess={setShowModalCheckout}
-            titleName={"Check-out thành công"}
-            ContentBody={
+            titleName={t("Check-out thành công")}
+            ContentBody={t(
               "Bạn đã tập luyện rất chăm chỉ, hãy cố gắng hơn nữa nhé!"
-            }
+            )}
           />
         )}
 
         <View style={styles.viewAvt}>
           <Image
-            source={require("../../assets/imghome/avt.jpg")}
+            source={{ uri: user.infoUser.thumbnail }}
             style={{
               resizeMode: "contain",
               width: width * 0.2,
@@ -158,12 +151,12 @@ const Home = () => {
                 key={index}
                 onPress={() => navigation.navigate(`${item.navi}`)}>
                 <Image source={item.img} style={styles.imgBox} />
-                <Text style={styles.textBox}>{item.title}</Text>
+                <Text style={styles.textBox}>{t(item.title)}</Text>
               </TouchableOpacity>
             ))}
           </View>
 
-          <Coursing course={dataCourseRunning} />
+          <ListStudent listStudent={schedule.listStudentToday} />
           <LessonSchedule
             setShowModalCheckIn={setShowModalCheckIn}
             setShowModalCheckout={setShowModalCheckout}
@@ -178,11 +171,11 @@ const Home = () => {
 // define your styles
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F8FAF4",
+    backgroundColor: "#F8f8f8",
     paddingTop: Constants.statusBarHeight + 10 || 30,
   },
   viewBody: {
-    backgroundColor: "#F8FAF4",
+    backgroundColor: "#f8f8f8",
     borderTopRightRadius: 30,
     borderTopLeftRadius: 30,
     marginTop: 30,

@@ -7,7 +7,7 @@ import { refreshTokenAction } from "./refreshToken.actions";
 export const getInfoUserAction = (id, navigate) => {
   const add = async (dispatch) => {
     try {
-      const res = await callApi(`academy/trainee/${id}`, "GET");
+      const res = await callApi(`academy/trainer/${id}`, "GET");
       if (res.code === 401) {
         dispatch(refreshTokenAction(navigate));
       } else {
@@ -15,7 +15,7 @@ export const getInfoUserAction = (id, navigate) => {
           dispatch(setInfoUser(res?.data));
           return res?.data;
         } else {
-          console.log(res, "academy.trainee");
+          console.log(res, "academy.trainer");
         }
       }
     } catch (err) {
@@ -28,7 +28,10 @@ export const getInfoUserAction = (id, navigate) => {
 export const loginUserAction = (data) => {
   const add = async (dispatch) => {
     try {
-      const res = await callApi(`user/login/`, "POST", data);
+      const res = await callApi(`trainer/login`, "POST", {
+        ...data,
+        db: "betatgh.fostech.vn",
+      });
       await dispatch(loginUser(res?.data?.result));
       return res?.data?.result;
     } catch (err) {

@@ -1,24 +1,39 @@
 //import liraries
+import { useNavigation } from "@react-navigation/native";
 import React, { Component } from "react";
+import { useTranslation } from "react-i18next";
 import { Dimensions } from "react-native";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { useDispatch } from "react-redux";
+import { getCourseDetailAction } from "../../store/actions/coursesAction";
 import { listTime } from "../../utils/datetime";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
 const ItemCourse = (props) => {
   const { item } = props;
+  const { t, i18n } = useTranslation();
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  const handleDetailCourse = async (id) => {
+    const res = await dispatch(getCourseDetailAction(navigation, id));
+    if (res) {
+      navigation.navigate("DetailCourse", { id: id });
+    }
+  };
 
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity
+      style={styles.container}
+      onPress={() => handleDetailCourse(item.id)}>
       <Image
-        source={require("../../assets/imghome/golfc.png")}
+        source={{ uri: `data:image/jpg;base64,${item.description_image}` }}
         style={styles.imgItem}
       />
       <Text style={styles.textTitle}>{item.length !== 0 ? item.name : ""}</Text>
       <Text style={styles.textMonth}>
-        {item.length !== 0 && listTime[item.time]}
+        {item.length !== 0 && t(listTime[item.time])}
       </Text>
     </TouchableOpacity>
   );

@@ -43,7 +43,7 @@ const ItemSchedule = (props) => {
         />
         <View style={styles.viewBg}>
           <Text style={styles.textTime}>
-            {formatTimeDisplay(item.date_start)}
+            {formatTimeDisplay(item?.date_start)}
           </Text>
         </View>
       </View>
@@ -67,12 +67,14 @@ const ItemSchedule = (props) => {
           />
           <Text style={styles.textViewRight}>{item?.location_id?.[1]}</Text>
         </View>
-        <View style={styles.viewAvt}>
-          <Image
-            source={require("../../assets/schedule/avt.png")}
-            style={styles.avt}
-          />
-        </View>
+        {item?.num_of_trainee > 0 && (
+          <View style={styles.viewAvt}>
+            <Image
+              source={require("../../assets/schedule/avt.png")}
+              style={styles.avt}
+            />
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );

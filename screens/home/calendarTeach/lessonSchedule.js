@@ -13,16 +13,18 @@ import SvgLine from "../../../svg/home/svgLine";
 import SvgLocation from "../../../svg/home/svgLocation";
 import ItemCheckSchedule from "./ItemCheckSchedule";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
 const LessonSchedule = (props) => {
+  const { t, i18n } = useTranslation();
   const { setShowModalCheckIn, schedule, setShowModalCheckout } = props;
 
   return (
     <View style={styles.container}>
       <View style={styles.ontext}></View>
-      <Text style={styles.title}>Lịch dạy sắp tới</Text>
+      <Text style={styles.title}>{t("Lịch dạy sắp tới")}</Text>
       {schedule.scheduleFuture.length !== 0 && (
         <ItemCheckSchedule
           item={schedule.scheduleFuture}

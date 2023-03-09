@@ -18,6 +18,8 @@ import {
   LexendDeca_900Black,
 } from "@expo-google-fonts/lexend-deca";
 import * as Updates from "expo-updates";
+import { useTranslation } from "react-i18next";
+import "./lang/i18n";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -34,6 +36,7 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+
   // Updates.checkForUpdateAsync().then((update) => {
   //   if (update.isAvailable) {
   //     Updates.fetchUpdateAsync().then((rs) => {

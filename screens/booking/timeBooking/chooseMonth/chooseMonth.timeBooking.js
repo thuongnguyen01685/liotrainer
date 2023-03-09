@@ -3,11 +3,14 @@ import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import moment from "moment";
 import "moment/locale/vi"; // without this line it didn't work
-moment.locale("vi");
+import { useSelector } from "react-redux";
 import { AntDesign } from "@expo/vector-icons";
 
 export default function ChooseMonthTimeBooking(props) {
   const { month, setMonth, setDay, setRefreshing } = props;
+  const { system } = useSelector((state) => state);
+  moment.locale(system.lang);
+
   const changeMonth = (number) => {
     setMonth(moment(month).add(number, "month"));
     setDay(

@@ -11,10 +11,12 @@ import { View, Text, StyleSheet } from "react-native";
 import HeaderBack from "../../../components/header/headerBack";
 import Constants from "expo-constants";
 import ItemLesson from "./itemLesson";
+import { useTranslation } from "react-i18next";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
 const DetailStudent = () => {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -35,7 +37,7 @@ const DetailStudent = () => {
             />
             <View style={styles.viewText}>
               <Text style={styles.textName}>Thương Nguyễn</Text>
-              <Text style={styles.textPosition}>Học viên</Text>
+              <Text style={styles.textPosition}>{t("Học viên")}</Text>
             </View>
           </View>
         </View>
@@ -44,7 +46,11 @@ const DetailStudent = () => {
         <FlatList
           data={Array(30).fill("")}
           renderItem={({ item, index }) => (
-            <ItemLesson key={index} index={index + 1} />
+            <ItemLesson
+              key={index}
+              index={index + 1}
+              temp={Array(30).fill("")}
+            />
           )}
           showsVerticalScrollIndicator={false}
         />

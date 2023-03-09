@@ -2,6 +2,7 @@ import callApi from "../../utils/callApi";
 import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { refreshTokenAction } from "./refreshToken.actions";
+import { getListStudentToday } from "../reducers/schedule.reducers";
 
 export const listBookingAction = (time, navigate) => async (dispatch) => {
   try {
@@ -229,32 +230,25 @@ export const checkoutBookingAction = (id, navigate) => {
   return add;
 };
 
-export const evaluateBookingAction = (data, navigate) => {
-  const add = async (dispatch) => {
-    try {
-      let temp = await AsyncStorage.getItem("token");
-      const token = await JSON.parse(temp);
-      const res = await callApi(
-        `restapi/1.0/object/academy.booking/${data.id}?vals={'rating_1':'${data.rating_1}','rating_2':'${data.rating_2}','feedback':'${data.feedback}', 'status':'done'}`,
-        "PUT",
-        "",
-        {
-          "X-Authorization": `Bearer ${token.access_token}`,
-        }
-      );
-      if (res.code === 401) {
-        await dispatch(refreshTokenAction(navigate));
-        await dispatch(evaluateBookingAction(id, navigate));
+export const getListStudentTodayAction = (navigate) => async (dispatch) => {
+  try {
+    let temp = await AsyncStorage.getItem("token");
+    const token = await JSON.parse(temp);
+    const res = await callApi(`academy/trainee/booking/today`, "GET", "", {
+      "X-Authorization": `Bearer ${token.access_token}`,
+    });
+
+    if (res.code === 401) {
+      dispatch(refreshTokenAction(navigate));
+    } else {
+      if (res?.data) {
+        dispatch(getListStudentToday(res.data));
+        return res?.data;
       } else {
-        if (res?.data?.["academy.booking"]) {
-          return res?.data?.["academy.booking"];
-        } else {
-          console.log(res, "academy.booking");
-        }
+        console.log(res, "list member");
       }
-    } catch (err) {
-      console.log(err);
     }
-  };
-  return add;
+  } catch (err) {
+    console.log(err);
+  }
 };

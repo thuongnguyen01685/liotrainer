@@ -5,7 +5,7 @@ import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
 // create a component
 const { width, height } = Dimensions.get("window");
 const ItemLesson = (props) => {
-  const { index } = props;
+  const { index, temp } = props;
 
   return (
     <View style={styles.item}>
@@ -18,8 +18,21 @@ const ItemLesson = (props) => {
       <View>
         <Image
           source={require("../../../assets/schedule/detail/check.png")}
-          style={{ width: 20, height: 20, resizeMode: "contain" }}
+          style={{ width: 20, height: 20, resizeMode: "contain", right: 5 }}
         />
+        {index !== temp.length && (
+          <View
+            style={{
+              borderWidth: 1.5,
+              height: height * 0.1,
+              borderColor: "#009045",
+              backgroundColor: "#009045",
+              width: 2,
+              position: "absolute",
+              top: 20,
+              left: 3,
+            }}></View>
+        )}
       </View>
     </View>
   );

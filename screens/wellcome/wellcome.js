@@ -30,8 +30,7 @@ const Wellcome = () => {
           flexDirection: "row",
           justifyContent: "center",
           marginBottom: 34,
-        }}
-      >
+        }}>
         {slides.map((_, index) => (
           <View
             key={index}
@@ -66,19 +65,17 @@ const Wellcome = () => {
       <Footer />
       <TouchableOpacity
         style={[styles.button, { backgroundColor: "#EEF3E5" }]}
-        onPress={() => navi.navigate("login")}
-      >
+        onPress={() => navi.navigate("login")}>
         <Text
           style={{
             fontSize: 20,
             color: "#688338",
             fontFamily: "LexendDeca_400Regular",
-          }}
-        >
+          }}>
           Đăng nhập
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={[styles.button, { backgroundColor: "#688338" }]}
         onPress={() => navi.navigate("register")}
       >
@@ -91,7 +88,7 @@ const Wellcome = () => {
         >
           Đăng ký
         </Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       {/* <TouchableOpacity style={[styles.button, { backgroundColor: "#fff" }]}>
         <Google />
         <Text

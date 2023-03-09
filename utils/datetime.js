@@ -54,6 +54,15 @@ export function formatDate(time, string) {
 export const listTime = {
   "3month": "3 Tháng",
   "6month": "6 Tháng",
-  "1year": "1 Năm",
-  "2year": "2 Năm",
+  "12month": "12 Tháng",
+  "18month": "18 Tháng",
+  "24month": "24 Tháng",
+};
+
+export const getTime = (value) => {
+  let hour = Math.floor(value);
+  let minute = Math.round((value - Math.floor(value)) * 60);
+  return `${hour > 9 ? hour : `0${hour}`}:${
+    minute > 9 ? minute : `0${minute}`
+  }`;
 };

@@ -8,12 +8,33 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Modal from "react-native-modal";
+import { useTranslation } from "react-i18next";
+import { useSelector, useDispatch } from "react-redux";
+import "../../lang/i18n";
+import { changeLanguageAction } from "../../store/actions/system.action";
 
 const { width } = Dimensions.get("window");
 const ModalChangeLanguage = (props) => {
   const { showModalLanguage, setShowModalLanguage } = props;
+  const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
+  const { system } = useSelector((state) => state);
+
+  const changeLanguage = async (value) => {
+    if (value === "vi") {
+      dispatch(changeLanguageAction("vi"));
+    } else {
+      dispatch(changeLanguageAction("en"));
+    }
+    const res = await AsyncStorage.setItem("lang", value);
+    i18n
+      .changeLanguage(value)
+      .then(() => dispatch(changeLanguageAction(value)))
+      .catch((err) => console.log(err));
+  };
+
   return (
     <Modal
       animationType="fade"
@@ -36,33 +57,63 @@ const ModalChangeLanguage = (props) => {
               fontSize: 16,
               fontFamily: "LexendDeca_600SemiBold",
             }}>
-            Chọn ngôn ngữ
+            {t("Chọn ngôn ngữ")}
           </Text>
         </View>
-        <View style={styles.language}>
+        <TouchableOpacity
+          style={styles.btnChoose}
+          onPress={() => changeLanguage("en")}>
           <View style={{ width: 20 }}></View>
-          <Text
-            style={{
-              fontSize: 14,
-              fontFamily: "LexendDeca_400Regular",
-              color: "#818181",
-            }}>
-            Tiếng Anh
-          </Text>
-          <View style={{ width: 20 }}></View>
-        </View>
-        <View style={styles.language}>
-          <View style={{ width: 20 }}></View>
+
           <Text
             style={{
               fontSize: 14,
               fontFamily: "LexendDeca_600SemiBold",
               color: "#688338",
             }}>
-            Tiếng Việt
+            {t("Tiếng Anh")}
           </Text>
-          <FontAwesome5 name="check" size={20} color="#688338" />
-        </View>
+          {system.lang === "en" && (
+            <View
+              style={{
+                right: 20,
+                position: "absolute",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                top: 20,
+              }}>
+              <FontAwesome5 name="check" size={20} color="#688338" />
+            </View>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.btnChoose}
+          onPress={() => changeLanguage("vi")}>
+          <View style={{ width: 20 }}></View>
+
+          <Text
+            style={{
+              fontSize: 14,
+              fontFamily: "LexendDeca_600SemiBold",
+              color: "#688338",
+            }}>
+            {t("Tiếng Việt")}
+          </Text>
+          {system.lang === "vi" && (
+            <View
+              style={{
+                right: 20,
+                position: "absolute",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                top: 20,
+              }}>
+              <FontAwesome5 name="check" size={20} color="#688338" />
+            </View>
+          )}
+        </TouchableOpacity>
       </View>
       <TouchableOpacity
         style={{
@@ -79,7 +130,7 @@ const ModalChangeLanguage = (props) => {
             fontSize: 16,
             fontFamily: "LexendDeca_700Bold",
           }}>
-          Hủy
+          {t("Hủy")}
         </Text>
       </TouchableOpacity>
     </Modal>
@@ -89,11 +140,17 @@ const styles = StyleSheet.create({
   language: {
     flexDirection: "row",
     width: "100%",
-    justifyContent: "space-between",
-    paddingHorizontal: 22,
+    //paddingHorizontal: 22,
     paddingVertical: 20,
     borderColor: "#D3D3D3",
     borderWidth: 0.5,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  btnChoose: {
+    paddingVertical: 20,
+    alignSelf: "center",
+    paddingHorizontal: 80,
   },
 });
 export default ModalChangeLanguage;

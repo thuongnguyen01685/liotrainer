@@ -17,15 +17,20 @@ import { workoutRecords, generalInformation } from "./listOption";
 import ModalChangeLanguage from "../../components/modal/modalChangeLanguage";
 import { logoutUser } from "../../store/reducers/user.reducers";
 import { setTabbar } from "../../store/reducers/tabbar.reducers";
+import { useTranslation } from "react-i18next";
+import "../../lang/i18n";
 
 const h = Dimensions.get("window").height;
 export default function Account() {
   //redux
   const dispatch = useDispatch();
   const { infoUser } = useSelector((state) => state.user);
+  const { system } = useSelector((state) => state);
+
   const navi = useNavigation();
   //state
   const [showModalLanguage, setShowModalLanguage] = useState(false);
+  const { t, i18n } = useTranslation();
 
   useFocusEffect(() => {
     const fetchData = () => {
@@ -62,7 +67,7 @@ export default function Account() {
           }}>
           <View>
             <Image
-              source={require("../../assets/splash.png")}
+              source={{ uri: infoUser.thumbnail }}
               resizeMode="contain"
               style={{
                 width: 86,
@@ -97,7 +102,7 @@ export default function Account() {
             {infoUser?.fullname}
           </Text>
         </View>
-        <Text style={styles.title}>Hồ sơ tập luyện</Text>
+        <Text style={styles.title}>{t("Hồ sơ tập luyện")}</Text>
         {workoutRecords.map((itemOption, index) => (
           <TouchableOpacity
             key={index}
@@ -105,12 +110,14 @@ export default function Account() {
             onPress={() => clickTab(itemOption)}>
             <View style={styles.row}>
               {itemOption.icon}
-              <Text style={styles.titleLocation}>{itemOption.title}</Text>
+              <Text style={styles.titleLocation}>{t(itemOption.title)}</Text>
             </View>
             <AntDesign name="right" size={20} color="rgba(104, 131, 56, 1)" />
           </TouchableOpacity>
         ))}
-        <Text style={[styles.title, { marginTop: 25 }]}>Thông tin chung</Text>
+        <Text style={[styles.title, { marginTop: 25 }]}>
+          {t("Thông tin chung")}
+        </Text>
         {generalInformation.map((itemOption, index) => (
           <TouchableOpacity
             key={index}
@@ -118,7 +125,7 @@ export default function Account() {
             onPress={() => clickTab(itemOption)}>
             <View style={styles.row}>
               {itemOption.icon}
-              <Text style={styles.titleLocation}>{itemOption.title}</Text>
+              <Text style={styles.titleLocation}>{t(itemOption.title)}</Text>
             </View>
             {itemOption.content ? (
               <Text
@@ -127,7 +134,7 @@ export default function Account() {
                   fontFamily: "LexendDeca_500Medium",
                   color: "#688338",
                 }}>
-                {itemOption.content}
+                {system.lang === "en" ? "English" : t("Tiếng Việt")}
               </Text>
             ) : (
               <AntDesign name="right" size={20} color="rgba(104, 131, 56, 1)" />
