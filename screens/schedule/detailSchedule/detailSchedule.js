@@ -59,7 +59,7 @@ const DetailSchedule = () => {
             />
           </View>
           <Text style={styles.textIcon}>
-            {/* {formatDate(schedule.detailSchedule.date.replace("/", "-"), "thu")}{" "} */}
+            {/* {formatDate(schedule.detailSchedule.date, "thu")}{" "} */}
             {schedule.detailSchedule.date}
           </Text>
         </View>
@@ -88,7 +88,6 @@ const DetailSchedule = () => {
             />
           </View>
           <Text style={styles.textIcon}>
-            {/* {formatTimeDisplay(schedule.detailSchedule.date_start)} */}{" "}
             {getTime(schedule.detailSchedule.time)}
           </Text>
         </View>

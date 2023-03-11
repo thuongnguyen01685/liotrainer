@@ -14,6 +14,7 @@ import HeaderBack from "../../../components/header/headerBack";
 import ItemStudent from "../../home/student/itemStudent";
 import { useTranslation } from "react-i18next";
 import { useSelector } from "react-redux";
+import BottomSheetHV from "../../schedule/detailSchedule/BottomSheetHV";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
@@ -21,71 +22,57 @@ const DetailCourse = () => {
   const { t } = useTranslation();
   const { course } = useSelector((state) => state);
   return (
-    <View style={styles.container}>
-      <ImageBackground
-        source={require("../../../assets/schedule/detail/bgstudent.png")}
-        style={styles.bgHeader}>
-        <StatusBar
-          translucent={true}
-          backgroundColor={"transparent"}
-          //barStyle="light-content"
-        />
-        <View style={styles.headerView}>
-          <HeaderBack />
-          <Text style={styles.textTitle}>{course.courseDetail.name}</Text>
-        </View>
+    <ImageBackground
+      source={require("../../../assets/schedule/detail/bgstudent.png")}
+      style={styles.bgHeader}>
+      <StatusBar
+        translucent={true}
+        backgroundColor={"transparent"}
+        //barStyle="light-content"
+      />
+      <View style={styles.headerView}>
+        <HeaderBack />
+        <Text style={styles.textTitle}>{course.courseDetail.name}</Text>
+      </View>
 
-        <View style={styles.viewPackUser}>
-          <Text style={styles.textDescrip}>
-            {course.courseDetail.description}
-          </Text>
-          <View style={styles.cardInfo}>
-            <View style={styles.infoPack}>
-              <Text style={styles.textCount}>
-                {course.courseDetail.num_lession <= 9 &&
-                course.courseDetail.num_lession > 0
-                  ? "0" + course.courseDetail.num_lession
-                  : course.courseDetail.num_lession}
-              </Text>
-              <Text style={styles.textLesson}>{t("Bài học")}</Text>
-            </View>
-            <View style={styles.borderGreen}></View>
-            <View style={styles.infoPack}>
-              <Text style={styles.textCount}>
-                {course.courseDetail.num_trainee <= 9 &&
-                course.courseDetail.num_trainee > 0
-                  ? "0" + course.courseDetail.num_trainee
-                  : course.courseDetail.num_trainee}
-              </Text>
-              <Text style={styles.textLesson}>{t("Học viên")}</Text>
-            </View>
+      <View style={styles.viewPackUser}>
+        <Text style={styles.textDescrip}>
+          {course.courseDetail.description}
+        </Text>
+        <View style={styles.cardInfo}>
+          <View style={styles.infoPack}>
+            <Text style={styles.textCount}>
+              {course.courseDetail.num_lession <= 9 &&
+              course.courseDetail.num_lession > 0
+                ? "0" + course.courseDetail.num_lession
+                : course.courseDetail.num_lession}
+            </Text>
+            <Text style={styles.textLesson}>{t("Bài học")}</Text>
+          </View>
+          <View style={styles.borderGreen}></View>
+          <View style={styles.infoPack}>
+            <Text style={styles.textCount}>
+              {course.courseDetail.num_trainee <= 9 &&
+              course.courseDetail.num_trainee > 0
+                ? "0" + course.courseDetail.num_trainee
+                : course.courseDetail.num_trainee}
+            </Text>
+            <Text style={styles.textLesson}>{t("Học viên")}</Text>
           </View>
         </View>
-      </ImageBackground>
-      <View style={styles.listLesson}>
-        <Text style={styles.textListStudent}>{t("Danh sách học viên")}</Text>
-        <FlatList
-          data={course.courseDetail.trainee}
-          renderItem={({ item }) => {
-            return <ItemStudent item={item} />;
-          }}
-          showsVerticalScrollIndicator={false}
-          keyExtractor={(item) => item.id}
-        />
       </View>
-    </View>
+      <BottomSheetHV arrHv={course.courseDetail.trainee} />
+    </ImageBackground>
   );
 };
 
 // define your styles
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   bgHeader: {
     width,
     paddingTop: Constants.statusBarHeight + 10 || 30,
     paddingHorizontal: 15,
+    flex: 1,
   },
   headerView: {
     flexDirection: "row",

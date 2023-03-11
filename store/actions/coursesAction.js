@@ -3,6 +3,7 @@ import {
   getCourseDetail,
   getCourseList,
   getCourseRunning,
+  getStudentDetail,
 } from "../reducers/course.reducers";
 import { refreshTokenAction } from "./refreshToken.actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -91,3 +92,32 @@ export const CourseRunningAction = (navigate) => async (dispatch) => {
     console.log(error);
   }
 };
+
+export const getStudentDetailAction =
+  (navigate, trainee_id) => async (dispatch) => {
+    try {
+      let temp = await AsyncStorage.getItem("token");
+      const token = await JSON.parse(temp);
+      const res = await callApi(
+        `academy/registration/subject/${trainee_id}`,
+        "GET",
+        "",
+        {
+          "X-Authorization": `Bearer ${token.access_token}`,
+        }
+      );
+
+      if (res.code === 401) {
+        dispatch(refreshTokenAction(navigate));
+      } else {
+        if (res?.data) {
+          dispatch(getStudentDetail(res.data));
+          return res?.data;
+        } else {
+          console.log(res, "academy.student.detail");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };

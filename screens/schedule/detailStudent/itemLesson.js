@@ -5,28 +5,36 @@ import { View, Text, StyleSheet, Image, Dimensions } from "react-native";
 // create a component
 const { width, height } = Dimensions.get("window");
 const ItemLesson = (props) => {
-  const { index, temp } = props;
+  const { index, temp, item } = props;
 
   return (
     <View style={styles.item}>
       <View style={styles.itemLesson}>
-        <Text style={styles.nameLesson}>Bài {index}: Giới thiệu</Text>
-        <Text style={styles.description}>
-          Giới thiệu các kỹ thuật sẽ hướng dẫn trong khóa học
+        <Text style={styles.nameLesson}>
+          Bài {index}: {item.name}
         </Text>
+        <Text style={styles.description}>{item.description}</Text>
       </View>
       <View>
-        <Image
-          source={require("../../../assets/schedule/detail/check.png")}
-          style={{ width: 20, height: 20, resizeMode: "contain", right: 5 }}
-        />
+        {item.state === "running" ? (
+          <Image
+            source={require("../../../assets/schedule/detail/key.png")}
+            style={{ width: 20, height: 20, resizeMode: "contain", right: 5 }}
+          />
+        ) : (
+          <Image
+            source={require("../../../assets/schedule/detail/check.png")}
+            style={{ width: 20, height: 20, resizeMode: "contain", right: 5 }}
+          />
+        )}
+
         {index !== temp.length && (
           <View
             style={{
               borderWidth: 1.5,
               height: height * 0.1,
-              borderColor: "#009045",
-              backgroundColor: "#009045",
+              borderColor: item.state === "running" ? "#CFCFCF" : "#009045",
+              backgroundColor: item.state === "running" ? "#CFCFCF" : "#009045",
               width: 2,
               position: "absolute",
               top: 20,
