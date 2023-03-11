@@ -56,6 +56,7 @@ const Home = () => {
   const [showModalCheckIn, setShowModalCheckIn] = useState(false);
   const [showModalCheckout, setShowModalCheckout] = useState(false);
   const [dataCourseRunning, setDataCourseRunning] = useState([]);
+  const [idSchedule, setIdSchedule] = useState("");
 
   useEffect(() => {
     async function it() {
@@ -124,6 +125,8 @@ const Home = () => {
             ContentBody={t(
               "Bạn đã tập luyện rất chăm chỉ, hãy cố gắng hơn nữa nhé!"
             )}
+            checkout={true}
+            idSchedule={idSchedule}
           />
         )}
 
@@ -161,6 +164,7 @@ const Home = () => {
             setShowModalCheckIn={setShowModalCheckIn}
             setShowModalCheckout={setShowModalCheckout}
             schedule={schedule}
+            setIdSchedule={setIdSchedule}
           />
         </ScrollView>
       </View>

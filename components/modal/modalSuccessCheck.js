@@ -10,11 +10,14 @@ import {
 } from "react-native";
 import Modal from "react-native-modal";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
+import { getDetailScheduleAction } from "../../store/actions/scheduleAction";
 
 const { width } = Dimensions.get("window");
 const ModalSuccessCheck = (props) => {
   const navi = useNavigation();
   const { t, i18n } = useTranslation();
+  const dispatch = useDispatch();
   const {
     showModalSuccess,
     setShowModalSuccess,
@@ -23,7 +26,24 @@ const ModalSuccessCheck = (props) => {
     setScanned,
     goHome,
     textBtn,
+    checkout,
+    idSchedule,
   } = props;
+
+  const handleNext = async () => {
+    if (setScanned) {
+      setScanned(false);
+    }
+    setShowModalSuccess(false);
+    if (goHome) {
+      navi.goBack();
+    } else if (checkout) {
+      await dispatch(getDetailScheduleAction(idSchedule, navi));
+      navi.navigate("Assessment");
+    } else {
+      navi.navigate("TabBar");
+    }
+  };
 
   return (
     <Modal
@@ -95,17 +115,7 @@ const ModalSuccessCheck = (props) => {
               styles.button,
               { backgroundColor: "#688338", marginLeft: 10 },
             ]}
-            onPress={() => {
-              if (setScanned) {
-                setScanned(false);
-              }
-              setShowModalSuccess(false);
-              if (goHome) {
-                navi.goBack();
-              } else {
-                navi.navigate("TabBar");
-              }
-            }}>
+            onPress={handleNext}>
             <Text
               style={{
                 fontSize: 16,

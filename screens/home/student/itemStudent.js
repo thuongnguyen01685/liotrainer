@@ -3,13 +3,27 @@ import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import React, { Component } from "react";
 import { useTranslation } from "react-i18next";
+import { Alert } from "react-native";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useDispatch } from "react-redux";
+import { getStudentDetailAction } from "../../../store/actions/coursesAction";
 
 // create a component
 const ItemStudent = (props) => {
   const { t, i18n } = useTranslation();
   const navigation = useNavigation();
   const { item } = props;
+  const dispatch = useDispatch();
+
+  const handleDetailStudent = async (id) => {
+    const res = await dispatch(getStudentDetailAction(navigation, id));
+
+    if (res) {
+      navigation.navigate("DetailStudent", { id: id });
+    } else {
+      Alert.alert("Học viên này chưa có khóa học hoạt động.");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -26,7 +40,7 @@ const ItemStudent = (props) => {
       </View>
       <TouchableOpacity
         style={styles.btnDetail}
-        onPress={() => navigation.navigate("DetailStudent")}>
+        onPress={() => handleDetailStudent(item.id)}>
         <Text style={styles.textBtn}>{t("Chi tiết")}</Text>
         <Ionicons name="arrow-forward" color="#fff" size={20} />
       </TouchableOpacity>

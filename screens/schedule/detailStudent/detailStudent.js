@@ -12,11 +12,14 @@ import HeaderBack from "../../../components/header/headerBack";
 import Constants from "expo-constants";
 import ItemLesson from "./itemLesson";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 
 // create a component
 const { width, height } = Dimensions.get("screen");
 const DetailStudent = () => {
   const { t } = useTranslation();
+  const { course } = useSelector((state) => state);
+
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -29,14 +32,20 @@ const DetailStudent = () => {
         />
         <HeaderBack />
         <View style={styles.viewPackUser}>
-          <Text style={styles.textTitle}>Gói Beginner 37 VGA 1:1</Text>
+          <Text style={styles.textTitle}>{course.studentDetail?.name}</Text>
           <View style={styles.infoUserView}>
             <Image
-              source={require("../../../assets/imghome/avt.jpg")}
+              source={
+                course.studentDetail?.trainee_image
+                  ? { uri: course.studentDetail?.trainee_image }
+                  : require("../../../assets/logoapp.png")
+              }
               style={styles.imgAvt}
             />
             <View style={styles.viewText}>
-              <Text style={styles.textName}>Thương Nguyễn</Text>
+              <Text style={styles.textName}>
+                {course.studentDetail?.trainee_name}
+              </Text>
               <Text style={styles.textPosition}>{t("Học viên")}</Text>
             </View>
           </View>
@@ -44,12 +53,13 @@ const DetailStudent = () => {
       </ImageBackground>
       <View style={styles.listLesson}>
         <FlatList
-          data={Array(30).fill("")}
+          data={course.studentDetail?.subject}
           renderItem={({ item, index }) => (
             <ItemLesson
               key={index}
               index={index + 1}
-              temp={Array(30).fill("")}
+              item={item}
+              temp={course.studentDetail?.subject}
             />
           )}
           showsVerticalScrollIndicator={false}

@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 const { width, height } = Dimensions.get("window");
 const BottomSheetHV = (props) => {
   const sheetRef = useRef(null);
-  const snapPoints = ["17%", "28%"];
+  const snapPoints = ["17%", "40%"];
   const navigation = useNavigation();
   const { t } = useTranslation();
   const { arrHv } = props;

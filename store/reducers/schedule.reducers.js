@@ -12,7 +12,15 @@ export const ScheduleReducer = createSlice({
   initialState,
   reducers: {
     getScheduleFuture: (state, action) => {
-      state.scheduleFuture = action.payload;
+      if (action.payload.code === 404) {
+        state.scheduleFuture = [];
+      } else {
+        if (action.payload.length > 0) {
+          state.scheduleFuture = action.payload;
+        } else {
+          state.scheduleFuture = [action.payload];
+        }
+      }
     },
     getScheduleList: (state, action) => {
       if (action.payload.code === 404) {

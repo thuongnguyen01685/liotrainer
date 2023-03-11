@@ -8,6 +8,7 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import SvgLine from "../../../svg/home/svgLine";
 import SvgLocation from "../../../svg/home/svgLocation";
@@ -19,19 +20,24 @@ import { useTranslation } from "react-i18next";
 const { width, height } = Dimensions.get("screen");
 const LessonSchedule = (props) => {
   const { t, i18n } = useTranslation();
-  const { setShowModalCheckIn, schedule, setShowModalCheckout } = props;
+  const { setShowModalCheckIn, schedule, setShowModalCheckout, setIdSchedule } =
+    props;
 
   return (
     <View style={styles.container}>
       <View style={styles.ontext}></View>
-      <Text style={styles.title}>{t("Lịch dạy sắp tới")}</Text>
-      {schedule.scheduleFuture.length !== 0 && (
-        <ItemCheckSchedule
-          item={schedule.scheduleFuture}
-          setShowModalSuccess={setShowModalCheckIn}
-          setShowModalCheckout={setShowModalCheckout}
-        />
-      )}
+      <Text style={styles.title}>{t("Lịch dạy hôm nay")}</Text>
+
+      {schedule?.scheduleFuture.length > 0 &&
+        schedule?.scheduleFuture?.map((item) => (
+          <ItemCheckSchedule
+            item={item}
+            setShowModalSuccess={setShowModalCheckIn}
+            setShowModalCheckout={setShowModalCheckout}
+            key={item.id}
+            setIdSchedule={setIdSchedule}
+          />
+        ))}
     </View>
   );
 };
@@ -40,6 +46,7 @@ const LessonSchedule = (props) => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
+    marginBottom: "20%",
   },
   ontext: {
     height: 2,

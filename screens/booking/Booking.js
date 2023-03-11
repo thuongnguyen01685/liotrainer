@@ -18,6 +18,7 @@ import { itemEpisodePackAction } from "../../store/actions/episodePack.actions";
 import {
   bookingAction,
   detailBookingAction,
+  getListStudentTodayAction,
   listBookingAction,
 } from "../../store/actions/booking.actions";
 import ChooseMonthTimeBooking from "./timeBooking/chooseMonth/chooseMonth.timeBooking";
@@ -163,6 +164,7 @@ export default function Booking(props) {
       setShowModalBookingSuccess(true);
       await dispatch(scheduleFutureAction(navigation));
       await dispatch(scheduleListAction(navigation));
+      await dispatch(getListStudentTodayAction(navigation));
     }
   };
 

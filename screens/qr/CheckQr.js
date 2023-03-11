@@ -14,7 +14,11 @@ import ModalSuccessCheck from "../../components/modal/modalSuccessCheck";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  checkInScheduleAction,
+  checkOutScheduleAction,
   checkQrAction,
+  getDetailFutureScheduleAction,
+  getDetailScheduleAction,
   scheduleFutureAction,
 } from "../../store/actions/scheduleAction";
 import ModalFailCheck from "../../components/modal/modalFailCheck";
@@ -25,10 +29,10 @@ import { useTranslation } from "react-i18next";
 const CheckQr = () => {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [showModalCheckQr, setShowModalCheckQr] = useState(false);
+  const [showModalCheckinQr, setShowModalCheckinQr] = useState(false);
+  const [showModalCheckoutQr, setShowModalCheckoutQr] = useState(false);
   const [showModalFailQr, setShowModalFailQr] = useState(false);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [idSchedule, setIdSchedule] = useState("");
 
   const navigation = useNavigation();
   const { t, i18n } = useTranslation();
@@ -47,30 +51,46 @@ const CheckQr = () => {
 
   const handleBarCodeScanned = async ({ type, data }) => {
     setScanned(true);
-    if (schedule.scheduleFuture.status === "pending") {
-      const res = await dispatch(checkQrAction(data, navigation, "checkin"));
+    const res = await dispatch(checkQrAction(data, navigation));
 
-      if (res?.["academy.trainer.booking"]) {
-        setTitle(t("Check-in thành công"));
-        setContent(t("Tiếp tục tập luyện thật chăm chỉ nào!"));
-        dispatch(scheduleFutureAction(navigation));
-        setShowModalCheckQr(true);
-      } else {
-        setShowModalFailQr(true);
+    if (res) {
+      const resultDetail = await dispatch(
+        getDetailFutureScheduleAction(res.id, navigation)
+      );
+      const resDetail = await dispatch(
+        getDetailScheduleAction(res.id, navigation)
+      );
+
+      if (resultDetail?.id) {
+        if (
+          resultDetail.status === "pending" ||
+          resultDetail.status === "approved"
+        ) {
+          const resCheckin = await dispatch(
+            checkInScheduleAction(resultDetail?.id, navigation)
+          );
+          if (resCheckin) {
+            dispatch(scheduleFutureAction(navigation));
+            setShowModalCheckinQr(true);
+          } else {
+            setShowModalFailQr(true);
+          }
+        } else if (resultDetail.status === "done") {
+          setShowModalFailQr(true);
+        } else {
+          const resCheckout = await dispatch(
+            checkOutScheduleAction(resultDetail?.id, navigation)
+          );
+          if (resCheckout && resDetail) {
+            dispatch(scheduleFutureAction(navigation));
+            setShowModalCheckoutQr(true);
+          } else {
+            setShowModalFailQr(true);
+          }
+        }
       }
     } else {
-      const res = await dispatch(checkQrAction(data, navigation, "checkout"));
-
-      if (res?.["academy.trainer.booking"]) {
-        setTitle(t("Check-out thành công"));
-        setContent(
-          t("Bạn đã tập luyện rất chăm chỉ, hãy cố gắng hơn nữa nhé!")
-        );
-        dispatch(scheduleFutureAction(navigation));
-        setShowModalCheckQr(true);
-      } else {
-        setShowModalFailQr(true);
-      }
+      setShowModalFailQr(true);
     }
   };
 
@@ -87,11 +107,21 @@ const CheckQr = () => {
   return (
     <View style={styles.container}>
       <ModalSuccessCheck
-        showModalSuccess={showModalCheckQr}
-        setShowModalSuccess={setShowModalCheckQr}
-        titleName={title}
-        ContentBody={content}
+        showModalSuccess={showModalCheckinQr}
+        setShowModalSuccess={setShowModalCheckinQr}
+        titleName={"Check-in thành công"}
+        ContentBody={"Tiếp tục tập luyện thật chăm chỉ nào!"}
         setScanned={setScanned}
+      />
+
+      <ModalSuccessCheck
+        showModalSuccess={showModalCheckoutQr}
+        setShowModalSuccess={setShowModalCheckoutQr}
+        titleName={"Check-out thành công"}
+        ContentBody={"Bạn đã tập luyện rất chăm chỉ, hãy cố gắng hơn nữa nhé!"}
+        setScanned={setScanned}
+        checkout={true}
+        idSchedule={idSchedule}
       />
       <ModalFailCheck
         showModalFail={showModalFailQr}
