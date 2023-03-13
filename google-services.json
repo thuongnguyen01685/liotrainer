@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "712403817145",
-    "project_id": "applio-99d31",
-    "storage_bucket": "applio-99d31.appspot.com"
+    "project_number": "857929738200",
+    "project_id": "lio-trainaer",
+    "storage_bucket": "lio-trainaer.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:712403817145:android:2254ce68580dbe7fe68168",
+        "mobilesdk_app_id": "1:857929738200:android:08405d028758e39821b4ad",
         "android_client_info": {
-          "package_name": "com.fostech.AppLio"
+          "package_name": "com.lio.trainer"
         }
       },
       "oauth_client": [
         {
-          "client_id": "712403817145-nf319m6safbjukkriir5na13lg3nbajt.apps.googleusercontent.com",
+          "client_id": "857929738200-oibqplp979cjod6doppr2ruhqtdq5sa6.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBzTZg-YKbqNwOfoTZ0o6ltV8JNIu93Boo"
+          "current_key": "AIzaSyAhJIKdZBaoOFPYXWl9eqpWQXtIefhcETo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "712403817145-nf319m6safbjukkriir5na13lg3nbajt.apps.googleusercontent.com",
+              "client_id": "857929738200-oibqplp979cjod6doppr2ruhqtdq5sa6.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

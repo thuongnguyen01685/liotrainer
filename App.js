@@ -37,19 +37,19 @@ export default function App() {
     return null;
   }
 
-  // Updates.checkForUpdateAsync().then((update) => {
-  //   if (update.isAvailable) {
-  //     Updates.fetchUpdateAsync().then((rs) => {
-  //       if (rs.isNew) {
-  //         Alert.alert(
-  //           "Update",
-  //           "Chương trình có cập nhật mới. Bạn hãy khởi động lại chương trình để áp dụng phiên bản mới nhất!",
-  //           [{ text: "Restart", onPress: () => Updates.reloadAsync() }],
-  //         );
-  //       }
-  //     });
-  //   }
-  // });
+  Updates.checkForUpdateAsync().then((update) => {
+    if (update.isAvailable) {
+      Updates.fetchUpdateAsync().then((rs) => {
+        if (rs.isNew) {
+          Alert.alert(
+            "Update",
+            "Chương trình có cập nhật mới. Bạn hãy khởi động lại chương trình để áp dụng phiên bản mới nhất!",
+            [{ text: "Restart", onPress: () => Updates.reloadAsync() }],
+          );
+        }
+      });
+    }
+  });
   let style_status_bar =
     Appearance.getColorScheme() === "light" ? "dark" : "light";
   return (

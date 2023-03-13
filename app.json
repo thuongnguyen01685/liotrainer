@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "THE GOLF HOUSE",
-    "slug": "AppLio",
-    "version": "1.0.2",
+    "name": "TGH Trainer",
+    "slug": "LioTrainer",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/logoapp.png",
     "userInterfaceStyle": "light",
@@ -21,7 +21,7 @@
       "icon": "./assets/logoapp.png",
       "color": "#FFFFFF",
       "androidMode": "collapse",
-      "androidCollapsedTitle": "TGH"
+      "androidCollapsedTitle": "TGHTrainer"
     },
     "updates": {
       "enabled": true,
@@ -34,7 +34,7 @@
     "ios": {
      
       "supportsTablet": false,
-      "bundleIdentifier": "app.tgh.vn",
+      "bundleIdentifier": "app.tghtrainer.vn",
       "infoPlist": {
         "NSCameraUsageDescription": "Chương trình này sử dụng máy ảnh để cho phép người dùng thêm hình đại diện.",
         "NSPhotoLibraryAddUsageDescription": "Chương trình sử dụng thư viện ảnh để cho phép người dùng thêm hình đại diện.",
@@ -52,7 +52,7 @@
         "backgroundColor": "#FFFFFF"
       },
       "versionCode": 50,
-      "package": "com.fostech.AppLio",
+      "package": "com.lio.trainer",
       "googleServicesFile": "./google-services.json",
       "permissions": [
         "ACCESS_COARSE_LOCATION",
@@ -79,7 +79,7 @@
       ],
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyAF73nS_jnLFoinG-B-O8nJz9To1wTmJyI"
+          "apiKey": ""
         }
       }
     },

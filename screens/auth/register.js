@@ -37,8 +37,8 @@ export default function Register() {
 
   const [dataInfo, setDataInfo] = useState({
     name: "",
-    id_app: "60939744ac969b4078488026",
-    group_id: "60939745ac969b40784883ed",
+    id_app: "62cbc813aede94676ae96d78",
+    group_id: "62cbc819aede94676ae972e4",
     phone: "",
     password: "",
     rePassword: "",
